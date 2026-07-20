@@ -5,6 +5,11 @@ import { getPage, getSiblingLinks } from '../services/ContentService';
 import RichText from '../components/ui/RichText';
 import AdmissionsForm from '../components/forms/AdmissionsForm';
 import PrayerRequestForm from '../components/forms/PrayerRequestForm';
+import ObjectivesLayout from '../components/about/ObjectivesLayout';
+import FaithLayout from '../components/about/FaithLayout';
+import MinistriesLayout from '../components/about/MinistriesLayout';
+import NewsLayout from '../components/about/NewsLayout';
+
 export default function Subpage() {
   const { slug } = useParams();
   const { path, content, meta } = getPage(slug);
@@ -65,8 +70,18 @@ export default function Subpage() {
               <span className="text-slate-900">{meta.title}</span>
             </div>
             
-            {/* Encapsulated RichText Render */}
-            <RichText content={content} />
+            {/* Conditionally Render Content based on Slug */}
+            {slug === 'objectives' ? (
+              <ObjectivesLayout />
+            ) : slug === 'doctrinal-statement-of-faith' ? (
+              <FaithLayout />
+            ) : slug === 'abts-ministries' ? (
+              <MinistriesLayout />
+            ) : slug === 'news' ? (
+              <NewsLayout />
+            ) : (
+              <RichText content={content} />
+            )}
 
             {/* Conditionally Render Custom Forms */}
             {slug === 'online-application-form-for-admission' && (
