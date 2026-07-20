@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logoImg from '../../assets/LOGO_transparent.png';
+import logoImg from '../../assets/LOGO_new.png';
 export default function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-400 py-6 border-t border-slate-900">
