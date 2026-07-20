@@ -5,13 +5,17 @@ import { X } from 'lucide-react';
 const assetFiles = import.meta.glob('../assets/*.{jpg,jpeg,png,jfif}', { eager: true });
 
 // Convert the glob object into an array of image URLs and filenames
-const images = Object.entries(assetFiles).map(([filepath, module]) => {
-  const filename = filepath.split('/').pop();
-  return {
-    url: module.default,
-    filename
-  };
-});
+const excludeList = ['LOGO.png', 'LOGO_transparent.png', 'hero.png', 'bible-hyperreal-single-intact.jpg'];
+
+const images = Object.entries(assetFiles)
+  .map(([filepath, module]) => {
+    const filename = filepath.split('/').pop();
+    return {
+      url: module.default,
+      filename
+    };
+  })
+  .filter(img => !excludeList.includes(img.filename));
 
 // Clean filename to use as subtitle
 const formatTitle = (filename) => {

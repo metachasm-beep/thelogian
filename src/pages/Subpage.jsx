@@ -3,7 +3,8 @@ import { Link, useParams } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { getPage, getSiblingLinks } from '../services/ContentService';
 import RichText from '../components/ui/RichText';
-
+import AdmissionsForm from '../components/forms/AdmissionsForm';
+import PrayerRequestForm from '../components/forms/PrayerRequestForm';
 export default function Subpage() {
   const { slug } = useParams();
   const { path, content, meta } = getPage(slug);
@@ -70,6 +71,18 @@ export default function Subpage() {
             {/* Encapsulated RichText Render */}
             <RichText content={content} />
 
+            {/* Conditionally Render Custom Forms */}
+            {slug === 'online-application-form-for-admission' && (
+              <div className="mt-8">
+                <AdmissionsForm />
+              </div>
+            )}
+            
+            {slug === 'prayer-request' && (
+              <div className="mt-8">
+                <PrayerRequestForm />
+              </div>
+            )}
           </article>
           
         </div>
