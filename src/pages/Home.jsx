@@ -48,7 +48,6 @@ function DesktopHome({ navigate, bentoFeatures }) {
 
   return (
     <div className="folds-wrapper h-[100dvh] relative overflow-hidden">
-
       {/* HERO (Fold 1) — z-40 highest so buttons always clickable */}
       <section className="fold absolute inset-0 z-40 flex items-center justify-center pt-20 px-4 bg-black">
         <div className="absolute inset-0 z-0">
@@ -94,7 +93,7 @@ function DesktopHome({ navigate, bentoFeatures }) {
             </div>
             <div className="lg:w-2/3 border-t border-slate-200">
               {bentoFeatures.map((feat, idx) => (
-                <div key={idx} className="feature-row group py-4 md:py-6 border-b border-slate-200 flex flex-col sm:flex-row gap-4 hover:bg-slate-50 transition-colors px-4 -mx-4 sm:mx-0 sm:px-0">
+                <div key={idx} className="feature-row group py-4 md:py-6 border-b border-slate-200 flex gap-4 hover:bg-slate-50 transition-colors">
                   <div className="text-slate-400 font-mono text-sm tracking-widest shrink-0 pt-1">{String(idx + 1).padStart(2, '0')}</div>
                   <div>
                     <h3 className="text-xl md:text-2xl font-bold mb-2 text-slate-900 tracking-tight" style={{ fontFamily: 'var(--font-headings)' }}>{feat.title}</h3>
@@ -149,91 +148,110 @@ function DesktopHome({ navigate, bentoFeatures }) {
 }
 
 /* ─────────────────────────────────────────────
-   MOBILE: Scale-Up Reveal
-   Each fold sits in normal document flow.
-   Entering fold:  scale 0.86 → 1.0 + fade in
-   Exiting fold:   scale 1.0  → 1.07 + fade out
-   Creates a "press into the page" depth feel.
-   No pinning — works perfectly with iOS scroll.
+   MOBILE: Scale-Up Reveal  +  CSS Scroll-Snap
+   ─ The container scrolls internally with
+     scroll-snap-type: y mandatory — only ONE
+     fold is ever in the viewport at a time.
+   ─ IntersectionObserver fires a GSAP scale
+     0.88 → 1 + fade entrance when each fold
+     snaps into view.
+   ─ Fold 2 content is compacted to fit exactly
+     one 100dvh viewport with no inner scroll.
 ───────────────────────────────────────────── */
 function MobileHome({ navigate, bentoFeatures }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.utils.toArray('.m-fold').forEach((fold) => {
-        const inner = fold.querySelector('.m-fold-inner');
-        if (!inner) return;
+    const container = containerRef.current;
+    if (!container) return;
 
-        // ── ENTER: scale up from 0.86 → 1, fade in ──
-        gsap.fromTo(inner,
-          { scale: 0.86, opacity: 0, transformOrigin: 'center center' },
-          {
-            scale: 1,
-            opacity: 1,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: fold,
-              start: 'top 95%',
-              end: 'top 10%',
-              scrub: 0.8,
-            }
-          }
-        );
+    // Set all inners to initial hidden state
+    const inners = container.querySelectorAll('.m-fold-inner');
+    gsap.set(inners, { scale: 0.88, opacity: 0 });
 
-        // ── EXIT: scale up to 1.07, fade away ──
-        gsap.fromTo(inner,
-          { scale: 1, opacity: 1 },
-          {
-            scale: 1.07,
-            opacity: 0,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: fold,
-              start: 'top -5%',
-              end: 'top -55%',
-              scrub: 0.8,
-            }
+    // Immediately reveal the first fold (already in view)
+    const firstInner = container.querySelector('.m-fold .m-fold-inner');
+    if (firstInner) {
+      gsap.to(firstInner, { scale: 1, opacity: 1, duration: 0.55, ease: 'power2.out' });
+    }
+
+    // IntersectionObserver (root = snap container) triggers
+    // scale-up when a fold snaps fully into view
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const inner = entry.target.querySelector('.m-fold-inner');
+          if (!inner) return;
+          if (entry.isIntersecting) {
+            gsap.to(inner, { scale: 1, opacity: 1, duration: 0.55, ease: 'power2.out' });
+          } else {
+            // Instantly reset so next entry always animates in fresh
+            gsap.set(inner, { scale: 0.88, opacity: 0 });
           }
-        );
-      });
-    }, containerRef);
-    return () => ctx.revert();
+        });
+      },
+      { root: container, threshold: 0.65 }
+    );
+
+    container.querySelectorAll('.m-fold').forEach((f) => observer.observe(f));
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <div ref={containerRef}>
-
-      {/* ── HERO ── */}
-      <section className="m-fold relative h-[100dvh] overflow-hidden bg-black">
-        <div className="m-fold-inner absolute inset-0 flex items-center justify-center px-5" style={{ willChange: 'transform, opacity' }}>
+    /*
+     * Snap container: takes exactly 100dvh, scrolls internally.
+     * scroll-snap-type: y mandatory  → hard snap per fold.
+     * overscroll-behavior: contain   → prevents scroll bleed to outer page.
+     * After the last fold, iOS scroll chaining reveals the Footer below.
+     */
+    <div
+      ref={containerRef}
+      className="h-[100dvh] overflow-y-scroll"
+      style={{
+        scrollSnapType: 'y mandatory',
+        overscrollBehavior: 'y contain',
+        WebkitOverflowScrolling: 'touch',
+      }}
+    >
+      {/* ── FOLD 1: HERO ── */}
+      <section
+        className="m-fold relative h-[100dvh] overflow-hidden bg-black shrink-0"
+        style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+      >
+        <div
+          className="m-fold-inner absolute inset-0 flex items-center justify-center px-5"
+          style={{ willChange: 'transform, opacity' }}
+        >
           <img src={heroBgImg} alt="ABTS Hero" className="absolute inset-0 w-full h-full object-cover opacity-55" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-black/85" />
-          <div className="relative z-10 text-center w-full max-w-sm mx-auto pt-16">
-            <div className="inline-block px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white/80 text-[10px] font-bold uppercase tracking-widest mb-6">
+          <div className="relative z-10 text-center w-full max-w-sm mx-auto pt-14">
+            <div className="inline-block px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white/80 text-[10px] font-bold uppercase tracking-widest mb-5">
               Empowering Leaders
             </div>
-            <h1 className="text-[2.5rem] font-black text-white tracking-tighter leading-[1.05] mb-5" style={{ fontFamily: 'var(--font-headings)' }}>
+            <h1
+              className="text-[2.4rem] font-black text-white tracking-tighter leading-[1.05] mb-5"
+              style={{ fontFamily: 'var(--font-headings)' }}
+            >
               Rooted in<br />
               <span className="text-[#b45309]">Scripture.</span><br />
               Equipped for<br />
               <span className="text-[#b45309]">Service.</span>
             </h1>
-            <p className="text-sm text-white/70 font-medium mb-10 leading-relaxed mx-auto max-w-[280px]">
+            <p className="text-sm text-white/70 font-medium mb-8 leading-relaxed mx-auto max-w-[270px]">
               World-class apostolic theological education — wherever you serve.
             </p>
-            <div className="flex flex-col gap-3 w-full max-w-[260px] mx-auto">
+            <div className="flex flex-col gap-3 w-full max-w-[250px] mx-auto">
               <Link
                 to="/online-application-form-for-admission"
                 onClick={() => navigate('/online-application-form-for-admission')}
-                className="w-full py-4 bg-[#b45309] text-white rounded-full font-bold text-sm tracking-wide shadow-lg text-center"
+                className="w-full py-3.5 bg-[#b45309] text-white rounded-full font-bold text-sm tracking-wide shadow-lg text-center"
               >
                 Apply Online
               </Link>
               <Link
                 to="/objectives"
                 onClick={() => navigate('/objectives')}
-                className="w-full py-4 rounded-full border border-white/30 text-white bg-white/10 font-semibold text-sm text-center"
+                className="w-full py-3.5 rounded-full border border-white/30 text-white bg-white/10 font-semibold text-sm text-center"
               >
                 Read Our Vision
               </Link>
@@ -242,36 +260,76 @@ function MobileHome({ navigate, bentoFeatures }) {
         </div>
       </section>
 
-      {/* ── WHY ABTS ── */}
-      <section className="m-fold relative min-h-[100dvh] overflow-hidden bg-white">
-        <div className="m-fold-inner absolute inset-0 flex items-center overflow-y-auto" style={{ willChange: 'transform, opacity' }}>
-          <div className="w-full px-5 py-24">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-600 mb-4">Why Choose Us</p>
-            <h2 className="text-3xl font-black text-slate-900 tracking-tighter leading-tight mb-8" style={{ fontFamily: 'var(--font-headings)' }}>
-              Why Choose<br />ABTS?
+      {/* ── FOLD 2: WHY ABTS — compacted to fit one viewport, no inner scroll ── */}
+      <section
+        className="m-fold relative h-[100dvh] overflow-hidden bg-white shrink-0"
+        style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+      >
+        <div
+          className="m-fold-inner absolute inset-0 flex flex-col justify-center px-5"
+          style={{ willChange: 'transform, opacity' }}
+        >
+          {/* Header row */}
+          <div className="mb-4 pt-14">
+            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-sky-600 mb-1">Why Choose Us</p>
+            <h2
+              className="text-2xl font-black text-slate-900 tracking-tighter leading-tight"
+              style={{ fontFamily: 'var(--font-headings)' }}
+            >
+              Why Choose ABTS?
             </h2>
-            <div className="divide-y divide-slate-100 border-t border-slate-100">
-              {bentoFeatures.map((feat, idx) => (
-                <div key={idx} className="py-5 flex items-start gap-4">
-                  <span className="text-slate-300 font-mono text-xs shrink-0 mt-1 w-5">{String(idx + 1).padStart(2, '0')}</span>
-                  <div>
-                    <h3 className="text-base font-bold text-slate-900 mb-1 leading-snug" style={{ fontFamily: 'var(--font-headings)' }}>{feat.title}</h3>
-                    <p className="text-sm text-slate-500 font-medium leading-relaxed">{feat.desc}</p>
-                  </div>
+          </div>
+
+          {/* Feature list — tight rows to fit all 6 in one screen */}
+          <div className="border-t border-slate-100 divide-y divide-slate-100 flex-1 flex flex-col justify-evenly">
+            {bentoFeatures.map((feat, idx) => (
+              <div key={idx} className="flex items-center gap-3 py-2">
+                <span className="text-slate-300 font-mono text-[10px] shrink-0 w-5 font-bold">
+                  {String(idx + 1).padStart(2, '0')}
+                </span>
+                <div className="min-w-0">
+                  <p
+                    className="text-sm font-bold text-slate-900 leading-snug truncate"
+                    style={{ fontFamily: 'var(--font-headings)' }}
+                  >
+                    {feat.title}
+                  </p>
+                  <p className="text-xs text-slate-500 font-medium leading-snug mt-0.5 line-clamp-2">
+                    {feat.desc}
+                  </p>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom CTA */}
+          <div className="pb-6 pt-3">
+            <Link
+              to="/objectives"
+              className="text-sky-600 font-bold text-xs uppercase tracking-widest border-b border-sky-200 pb-0.5"
+            >
+              Learn About Our Vision →
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ── TESTIMONIAL ── */}
-      <section className="m-fold relative h-[100dvh] overflow-hidden bg-slate-900">
-        <div className="m-fold-inner absolute inset-0 flex items-center justify-center px-5" style={{ willChange: 'transform, opacity' }}>
+      {/* ── FOLD 3: TESTIMONIAL ── */}
+      <section
+        className="m-fold relative h-[100dvh] overflow-hidden bg-slate-900 shrink-0"
+        style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+      >
+        <div
+          className="m-fold-inner absolute inset-0 flex items-center justify-center px-5"
+          style={{ willChange: 'transform, opacity' }}
+        >
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(2,132,199,0.08),transparent_70%)]" />
           <div className="relative z-10 text-center max-w-sm mx-auto">
-            <Quote className="w-10 h-10 text-sky-400 mx-auto mb-6 opacity-60" />
-            <blockquote className="text-lg font-semibold text-white leading-relaxed mb-8" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+            <Quote className="w-9 h-9 text-sky-400 mx-auto mb-5 opacity-60" />
+            <blockquote
+              className="text-base font-semibold text-white leading-relaxed mb-7"
+              style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
+            >
               "God often shapes His servants within the very contexts where they are already serving. Our programs are designed to complement your ministry."
             </blockquote>
             <div>
@@ -282,26 +340,41 @@ function MobileHome({ navigate, bentoFeatures }) {
         </div>
       </section>
 
-      {/* ── ACADEMICS ── */}
-      <section className="m-fold relative min-h-[100dvh] overflow-hidden bg-slate-950">
-        <div className="m-fold-inner absolute inset-0 flex items-center justify-center px-5" style={{ willChange: 'transform, opacity' }}>
+      {/* ── FOLD 4: ACADEMICS ── */}
+      <section
+        className="m-fold relative h-[100dvh] overflow-hidden bg-slate-950 shrink-0"
+        style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
+      >
+        <div
+          className="m-fold-inner absolute inset-0 flex items-center justify-center px-5"
+          style={{ willChange: 'transform, opacity' }}
+        >
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(2,132,199,0.18),transparent_60%)] pointer-events-none" />
-          <div className="relative z-10 text-center w-full py-16">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-500 mb-4">Academic Programs</p>
-            <h2 className="text-3xl font-black text-white tracking-tighter leading-tight mb-4" style={{ fontFamily: 'var(--font-headings)' }}>
-              Programs &amp;<br />Degrees
+          <div className="relative z-10 text-center w-full">
+            <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-sky-500 mb-3">Academic Programs</p>
+            <h2
+              className="text-[1.9rem] font-black text-white tracking-tighter leading-tight mb-3"
+              style={{ fontFamily: 'var(--font-headings)' }}
+            >
+              Programs &amp; Degrees
             </h2>
-            <p className="text-sm text-slate-400 font-medium mb-10 max-w-[260px] mx-auto leading-relaxed">
+            <p className="text-xs text-slate-400 font-medium mb-7 max-w-[240px] mx-auto leading-relaxed">
               Where the Bible is the textbook. Rigorous, accredited theology for every calling.
             </p>
-            <div className="grid grid-cols-3 gap-3 max-w-[280px] mx-auto mb-10">
+            <div className="grid grid-cols-3 gap-2.5 max-w-[270px] mx-auto mb-7">
               {['B.Th', 'B.Min', 'M.Div', 'M.Th', 'D.Min', 'Ph.D'].map((degree, idx) => (
-                <div key={idx} className="border border-sky-900/50 bg-sky-900/20 text-sky-400 font-bold font-mono text-sm py-4 rounded-xl text-center">
+                <div
+                  key={idx}
+                  className="border border-sky-900/50 bg-sky-900/20 text-sky-400 font-bold font-mono text-sm py-3.5 rounded-xl text-center"
+                >
                   {degree}
                 </div>
               ))}
             </div>
-            <Link to="/academic" className="inline-block text-white uppercase tracking-widest text-xs font-bold border-b border-white pb-1 hover:text-sky-400 hover:border-sky-400 transition-colors">
+            <Link
+              to="/academic"
+              className="inline-block text-white uppercase tracking-widest text-[10px] font-bold border-b border-white pb-0.5"
+            >
               View All Programs
             </Link>
           </div>
