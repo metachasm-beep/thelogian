@@ -15,6 +15,18 @@ export default function Home() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      
+      // Sticky Stack Parallax Folds
+      const folds = gsap.utils.toArray('.fold');
+      folds.forEach((fold, i) => {
+        ScrollTrigger.create({
+          trigger: fold,
+          start: "top top",
+          pin: true,
+          pinSpacing: false
+        });
+      });
+
       // Features Bento Box Animation
       gsap.fromTo('.bento-item',
         { opacity: 0, scale: 0.95, y: 40 },
@@ -115,10 +127,10 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-slate-50 bg-tactile-noise w-full h-[100dvh] overflow-y-auto overflow-x-hidden snap-y snap-mandatory">
+    <div className="bg-slate-50 bg-tactile-noise w-full relative">
       
       {/* HERO SECTION - CINEMATIC FULL BLEED */}
-      <section className="relative h-[100dvh] snap-start flex items-center justify-center pt-20 px-4 overflow-hidden bg-black">
+      <section className="fold relative z-10 h-[100dvh] flex items-center justify-center pt-20 px-4 overflow-hidden bg-black shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
         {/* Full Bleed Image with Parallax Fixed Position */}
         <div className="absolute inset-0 z-0">
           <img 
@@ -170,7 +182,7 @@ export default function Home() {
       </section>
       
       {/* FEATURES GRID */}
-      <section ref={featuresRef} className="h-[100dvh] snap-start py-32 bg-white/95 backdrop-blur-md bg-grid-pattern border-y border-slate-200/50 flex flex-col justify-center relative z-10 shadow-2xl">
+      <section ref={featuresRef} className="fold relative z-20 h-[100dvh] py-32 bg-white/95 backdrop-blur-md bg-grid-pattern border-y border-slate-200/50 flex flex-col justify-center shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight" style={{ fontFamily: 'var(--font-headings)' }}>
@@ -206,7 +218,7 @@ export default function Home() {
       </section>
 
       {/* TESTIMONIAL / CTA */}
-      <section ref={testimonialRef} className="h-[100dvh] snap-start py-32 px-4 relative overflow-hidden bg-slate-50 flex items-center justify-center z-10 shadow-2xl">
+      <section ref={testimonialRef} className="fold relative z-30 h-[100dvh] py-32 px-4 overflow-hidden bg-slate-50 flex items-center justify-center shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[30rem] font-serif font-black text-slate-200 opacity-20 pointer-events-none select-none">
           "
         </div>
@@ -223,7 +235,7 @@ export default function Home() {
       </section>
       
       {/* FOOTER SNAP */}
-      <section className="h-[100dvh] snap-start relative flex flex-col justify-end bg-slate-50">
+      <section className="fold relative z-40 h-[100dvh] flex flex-col justify-end bg-slate-900 shadow-[0_-20px_50px_rgba(0,0,0,0.3)]">
         <Footer />
       </section>
     </div>
