@@ -12,6 +12,8 @@ import NewsLayout from '../components/about/NewsLayout';
 import ProgramsLayout from '../components/academics/ProgramsLayout';
 import GraduationLayout from '../components/academics/GraduationLayout';
 import RecipientsLayout from '../components/academics/RecipientsLayout';
+import ContactLayout from '../components/contact/ContactLayout';
+import TestimonialsLayout from '../components/contact/TestimonialsLayout';
 
 export default function Subpage() {
   const { slug } = useParams();
@@ -88,6 +90,10 @@ export default function Subpage() {
               <GraduationLayout />
             ) : slug === 'prominent-doctorate-recipients-of-abts' ? (
               <RecipientsLayout />
+            ) : slug === 'contact-us' ? (
+              <ContactLayout />
+            ) : slug === 'testimonials' ? (
+              <TestimonialsLayout />
             ) : (
               <RichText content={content} />
             )}
