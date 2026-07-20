@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #1e3a8a; /* Cathedral Blue */
-  --color-secondary: #b45309; /* Aged Gold */
+  --color-brand-primary: #1e3a8a; /* Cathedral Blue */
+  --color-brand-accent: #b45309; /* Aged Gold */
+  --color-brand-surface: #FAFAF8; /* Vellum */
   --font-headings: "Playfair Display", serif;
   --font-body: "Inter", sans-serif;
 }

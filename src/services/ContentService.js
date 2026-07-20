@@ -40,3 +40,51 @@ export function getSiblingLinks(category) {
     .filter(([_, m]) => m.category === category)
     .map(([path, m]) => ({ path, title: m.title }));
 }
+
+/**
+ * Searches the site metadata and content for a given query.
+ * @param {string} query The search string
+ * @returns {Array} An array of results { path, title, category, snippet }
+ */
+export function searchPages(query) {
+  if (!query || query.trim() === '') return [];
+  const lowerQuery = query.toLowerCase();
+  
+  const results = [];
+  
+  for (const [path, meta] of Object.entries(METADATA)) {
+    let matchScore = 0;
+    
+    // Check title
+    if (meta.title.toLowerCase().includes(lowerQuery)) {
+      matchScore += 10;
+    }
+    
+    // Check content
+    const content = abtsData[path];
+    let snippet = null;
+    if (content) {
+      const contentLower = content.toLowerCase();
+      const index = contentLower.indexOf(lowerQuery);
+      if (index !== -1) {
+        matchScore += 5;
+        // Generate snippet
+        const start = Math.max(0, index - 40);
+        const end = Math.min(content.length, index + query.length + 40);
+        snippet = (start > 0 ? '...' : '') + content.substring(start, end) + (end < content.length ? '...' : '');
+      }
+    }
+    
+    if (matchScore > 0) {
+      results.push({
+        path,
+        title: meta.title,
+        category: meta.category,
+        snippet: snippet || meta.category,
+        score: matchScore
+      });
+    }
+  }
+  
+  return results.sort((a, b) => b.score - a.score);
+}
