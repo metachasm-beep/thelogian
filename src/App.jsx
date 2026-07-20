@@ -2,18 +2,33 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
-import About from './pages/About';
-import Academics from './pages/Academics';
-import Admissions from './pages/Admissions';
+import Subpage from './pages/Subpage';
 
 export default function App() {
+  const subpagePaths = [
+    '/online-application-form-for-admission',
+    '/online-enquiry',
+    '/frequently-asked-questions',
+    '/academic',
+    '/list-of-graduation',
+    '/prominent-doctorate-recipients-of-abts',
+    '/objectives',
+    '/doctrinal-statement-of-faith',
+    '/abts-ministries',
+    '/abts-indo-burma-border-area-ministries-pictures',
+    '/news',
+    '/contact-us',
+    '/prayer-request',
+    '/testimonials'
+  ];
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="about" element={<About />} />
-        <Route path="academics" element={<Academics />} />
-        <Route path="admissions" element={<Admissions />} />
+        {subpagePaths.map(path => (
+          <Route key={path} path={path.substring(1)} element={<Subpage />} />
+        ))}
       </Route>
     </Routes>
   );
