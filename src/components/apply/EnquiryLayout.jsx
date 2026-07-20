@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Send, CheckCircle, AlertCircle, User, Mail, Phone, MessageSquare } from 'lucide-react';
 
-const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwzgyKMKHBK4wzahxzhCcoBxJENpr6-wYOagdVSbfWFtkIYS1lhVa3uxBpHXKrKIIZB/exec';
+const WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwyAYIpd7PVCPsPcMeGAWudk9of93p4v4sUMU8yka2gih9OfLjnZUMZhRY31X3zjDIfyw/exec';
 
 const contactMethods = [
   { icon: Mail,    label: 'Email',          value: 'abtsindia@yahoo.in',    href: 'mailto:abtsindia@yahoo.in' },
