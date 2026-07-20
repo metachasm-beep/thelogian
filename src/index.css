@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@layer base {
+  html, body {
+    @apply overflow-x-hidden;
+  }
+}
+
 @theme {
   --color-brand-primary: #1e3a8a; /* Cathedral Blue */
   --color-brand-accent: #b45309; /* Aged Gold */

@@ -4,6 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GraduationCap, Globe2, HeartHandshake, Users, Sparkles, ShieldCheck, Quote } from 'lucide-react';
 import BlurText from '../components/ui/BlurText';
+import Footer from '../components/layout/Footer';
 import heroBgImg from '../assets/bible-hyperreal-single-intact.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -114,19 +115,19 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-slate-50 bg-tactile-noise min-h-screen">
+    <div className="bg-slate-50 bg-tactile-noise w-full h-[100dvh] overflow-y-auto overflow-x-hidden snap-y snap-mandatory">
       
       {/* HERO SECTION - CINEMATIC FULL BLEED */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 px-4 overflow-hidden bg-black">
-        {/* Full Bleed Image with Vignette */}
+      <section className="relative h-[100dvh] snap-start flex items-center justify-center pt-20 px-4 overflow-hidden bg-black">
+        {/* Full Bleed Image with Parallax Fixed Position */}
         <div className="absolute inset-0 z-0">
           <img 
             src={heroBgImg} 
             alt="ABTS Hero Background" 
-            className="w-full h-full object-cover opacity-60"
+            className="w-full h-[100dvh] object-cover opacity-60 fixed top-0 left-0"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)]"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90 fixed top-0 left-0 pointer-events-none"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)] fixed top-0 left-0 pointer-events-none"></div>
         </div>
 
         <div className="relative z-10 text-center max-w-5xl mx-auto">
@@ -169,7 +170,7 @@ export default function Home() {
       </section>
       
       {/* FEATURES GRID */}
-      <section ref={featuresRef} className="py-32 bg-white/40 bg-grid-pattern border-y border-slate-200/50">
+      <section ref={featuresRef} className="h-[100dvh] snap-start py-32 bg-white/95 backdrop-blur-md bg-grid-pattern border-y border-slate-200/50 flex flex-col justify-center relative z-10 shadow-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight" style={{ fontFamily: 'var(--font-headings)' }}>
@@ -205,7 +206,7 @@ export default function Home() {
       </section>
 
       {/* TESTIMONIAL / CTA */}
-      <section ref={testimonialRef} className="py-32 px-4 relative overflow-hidden bg-transparent">
+      <section ref={testimonialRef} className="h-[100dvh] snap-start py-32 px-4 relative overflow-hidden bg-slate-50 flex items-center justify-center z-10 shadow-2xl">
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[30rem] font-serif font-black text-slate-200 opacity-20 pointer-events-none select-none">
           "
         </div>
@@ -221,6 +222,10 @@ export default function Home() {
         </div>
       </section>
       
+      {/* FOOTER SNAP */}
+      <section className="h-[100dvh] snap-start relative flex flex-col justify-end bg-slate-50">
+        <Footer />
+      </section>
     </div>
   );
 }
