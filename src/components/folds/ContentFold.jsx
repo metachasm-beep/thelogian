@@ -1,30 +1,55 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { motion } from 'motion/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-export default function ContentFold({ title, content, index }) {
+gsap.registerPlugin(ScrollTrigger);
+
+export default function ContentFold({ title, content, id }) {
+  const containerRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Fade up animation for the content block
+      gsap.fromTo(
+        contentRef.current,
+        { opacity: 0, y: 40 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          }
+        }
+      );
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section 
-      id={`fold-${index}`}
-      className="h-[100dvh] w-full snap-start snap-always relative flex flex-col justify-center overflow-hidden bg-slate-50 text-slate-900 border-b border-slate-200"
+      id={id}
+      ref={containerRef}
+      className="w-full relative flex flex-col items-center justify-center py-16 md:py-24 border-b border-slate-200"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-100/50 pointer-events-none" />
-      
-      <div className="container mx-auto max-w-4xl px-6 py-24 md:py-32 flex-1 flex flex-col relative z-10 h-full overflow-y-auto custom-scrollbar">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, amount: 0.1 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="prose prose-slate prose-lg md:prose-xl max-w-none"
+      <div className="container mx-auto max-w-4xl px-4 md:px-6 flex-1 flex flex-col relative z-10">
+        <div
+          ref={contentRef}
+          className="prose prose-sm sm:prose-base md:prose-lg prose-slate max-w-none w-full"
         >
           {title && (
-            <h2 className="text-4xl md:text-5xl font-semibold tracking-tight text-slate-900 mb-12 uppercase text-center border-b pb-6 border-slate-200">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-slate-900 mb-8 md:mb-12 uppercase text-center border-b pb-6 border-slate-200" style={{ fontFamily: 'Poppins, sans-serif' }}>
               {title}
             </h2>
           )}
-          <div className="bg-white/80 backdrop-blur-md p-8 md:p-12 rounded-2xl shadow-sm border border-slate-200/60">
+          <div className="bg-white p-6 sm:p-8 md:p-12 rounded-2xl shadow-sm border border-slate-200/60">
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
               components={{
@@ -37,25 +62,25 @@ export default function ContentFold({ title, content, index }) {
                     <img 
                       {...props} 
                       src={src}
-                      className="rounded-xl shadow-md mx-auto my-8 max-h-[60vh] object-contain bg-slate-100" 
+                      className="rounded-xl shadow-md mx-auto my-6 md:my-8 max-h-[60vh] object-contain bg-slate-50 w-full" 
                       alt={props.alt || 'ABTS image'}
                     />
                   );
                 },
-                h1: ({node, ...props}) => <h1 className="text-3xl font-semibold mt-8 mb-4 text-slate-800" {...props} />,
-                h2: ({node, ...props}) => <h2 className="text-2xl font-semibold mt-8 mb-4 text-slate-800" {...props} />,
-                h3: ({node, ...props}) => <h3 className="text-xl font-medium mt-6 mb-3 text-slate-700" {...props} />,
+                h1: ({node, ...props}) => <h1 className="text-2xl sm:text-3xl font-semibold mt-8 mb-4 text-slate-800" style={{ fontFamily: 'Poppins, sans-serif' }} {...props} />,
+                h2: ({node, ...props}) => <h2 className="text-xl sm:text-2xl font-semibold mt-8 mb-4 text-slate-800" style={{ fontFamily: 'Poppins, sans-serif' }} {...props} />,
+                h3: ({node, ...props}) => <h3 className="text-lg sm:text-xl font-medium mt-6 mb-3 text-slate-700" style={{ fontFamily: 'Poppins, sans-serif' }} {...props} />,
                 p: ({node, ...props}) => <p className="leading-relaxed mb-6 text-slate-600" {...props} />,
-                a: ({node, ...props}) => <a className="text-blue-700 hover:text-blue-900 underline decoration-blue-300 underline-offset-4 transition-colors" {...props} />,
-                ul: ({node, ...props}) => <ul className="list-disc pl-6 mb-6 space-y-2 text-slate-600" {...props} />,
-                ol: ({node, ...props}) => <ol className="list-decimal pl-6 mb-6 space-y-2 text-slate-600" {...props} />,
-                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-blue-600 pl-6 italic text-slate-700 bg-blue-50/50 py-4 pr-4 rounded-r-lg my-6" {...props} />
+                a: ({node, ...props}) => <a className="text-sky-700 hover:text-sky-900 underline decoration-sky-300 underline-offset-4 transition-colors font-medium" {...props} />,
+                ul: ({node, ...props}) => <ul className="list-disc pl-5 sm:pl-6 mb-6 space-y-2 text-slate-600" {...props} />,
+                ol: ({node, ...props}) => <ol className="list-decimal pl-5 sm:pl-6 mb-6 space-y-2 text-slate-600" {...props} />,
+                blockquote: ({node, ...props}) => <blockquote className="border-l-4 border-sky-600 pl-4 sm:pl-6 italic text-slate-700 bg-sky-50/50 py-4 pr-4 rounded-r-lg my-6" {...props} />
               }}
             >
               {content}
             </ReactMarkdown>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
