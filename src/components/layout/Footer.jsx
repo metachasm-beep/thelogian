@@ -21,9 +21,14 @@ export default function Footer() {
                 </span>
               </div>
             </Link>
-            <p className="text-sm leading-relaxed max-w-sm">
-              Apostolic Biblical Theological Seminary offers rigorous theological education taught by experienced, world-class faculty. Rooted in Scripture, equipped for Service.
-            </p>
+            <div className="text-sm leading-relaxed max-w-sm">
+              <p>PLOT NO 1, BEHIND DILLI HAAT</p>
+              <p>OPP: INA MARKET, WEST KIDWAI NAGAR</p>
+              <p>NEW DELHI-110023, INDIA</p>
+              <p className="mt-2 text-sky-400">paoginmangte78u@gmail.com</p>
+              <p className="mt-1">+91-8851503372</p>
+              <p className="mt-1">+91-9599513372 (WhatsApp)</p>
+            </div>
           </div>
 
           <div>
