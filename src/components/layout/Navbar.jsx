@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import logoImg from '../../assets/LOGO.png';
+import logoImg from '../../assets/LOGO_transparent.png';
 import abtsData from '../../data/abts_content_clean.json';
 
 const NAV_LINKS = [
@@ -36,7 +36,14 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-12 h-12 flex items-center justify-center group-hover:scale-105 transition-transform">
+            <div 
+              className="w-12 h-12 flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(logoImg, '_blank');
+              }}
+              title="Click to view full logo"
+            >
               <img src={logoImg} alt="ABTS Logo" className="w-full h-full object-contain drop-shadow-md" />
             </div>
             <div className="flex flex-col">
