@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 
-const images = [
-  "21 DECEMBER 2011, 5TH GRADUATION DAY.jfif",
-  "21,December 2011 ATS 5TH GRADUATION DAY.jfif",
-  "ABTS  Ninth Graduation Exercise Group Photo- 17th December 2015.jfif",
-  "APOSTOLIC BIBLICAL THEOLOGICAL SEMINARY (ABTS) NEW DELHI, INDIA. 2011 GRADUATES STUDENTS.jfif",
-  "ATS FOURTH GRADUATION DAY.jfif",
-  "Apostolic Biblical Theological Seminary (ABTS) regular graduates students-21 Dec 2011.jfif",
-  "Dr Cp. Thomas, Dr Mangte with graduating students-21 December 2011.jfif",
-  "Dr Mangte with his doctorate degree students and recipients.jfif",
-  "dr mangte award 2014e.jpg"
-];
+// Dynamically import all images in src/assets
+const assetFiles = import.meta.glob('../assets/*.{jpg,jpeg,png,jfif}', { eager: true });
+
+// Convert the glob object into an array of image URLs and filenames
+const images = Object.entries(assetFiles).map(([filepath, module]) => {
+  const filename = filepath.split('/').pop();
+  return {
+    url: module.default,
+    filename
+  };
+});
 
 // Clean filename to use as subtitle
 const formatTitle = (filename) => {
@@ -44,20 +44,20 @@ export default function Gallery() {
           {images.map((img, idx) => (
             <div 
               key={idx} 
-              className="break-inside-avoid bg-white p-3 rounded-2xl shadow-sm ring-1 ring-slate-900/5 group cursor-pointer transition-all hover:shadow-md hover:ring-sky-500/30"
+              className="break-inside-avoid bg-white p-3 rounded-2xl shadow-sm ring-1 ring-slate-900/5 group cursor-pointer transition-all hover:shadow-md hover:ring-[#1e3a8a]/30"
               onClick={() => setSelectedImg(img)}
             >
               <div className="overflow-hidden rounded-xl bg-slate-100">
                 <img 
-                  src={`/assets/${img}`} 
-                  alt={formatTitle(img)} 
+                  src={img.url} 
+                  alt={formatTitle(img.filename)} 
                   className="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-500 ease-out"
                   loading="lazy"
                 />
               </div>
               <div className="mt-4 px-2 pb-2">
                 <h3 className="text-sm font-semibold text-slate-700 leading-tight">
-                  {formatTitle(img)}
+                  {formatTitle(img.filename)}
                 </h3>
               </div>
             </div>
@@ -77,13 +77,13 @@ export default function Gallery() {
           
           <div className="max-w-5xl w-full flex flex-col items-center" onClick={e => e.stopPropagation()}>
             <img 
-              src={`/assets/${selectedImg}`} 
-              alt={formatTitle(selectedImg)}
+              src={selectedImg.url} 
+              alt={formatTitle(selectedImg.filename)}
               className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
             />
             <div className="mt-6 text-center">
               <h2 className="text-white text-xl font-bold tracking-wide">
-                {formatTitle(selectedImg)}
+                {formatTitle(selectedImg.filename)}
               </h2>
             </div>
           </div>
