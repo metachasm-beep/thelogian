@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, BookOpen } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import logoImg from '../../assets/LOGO.png';
 import abtsData from '../../data/abts_content_clean.json';
 
 const NAV_LINKS = [
@@ -35,8 +36,8 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 bg-sky-900 text-white flex items-center justify-center rounded-xl shadow-lg group-hover:scale-105 transition-transform">
-              <BookOpen size={20} />
+            <div className="w-12 h-12 flex items-center justify-center group-hover:scale-105 transition-transform">
+              <img src={logoImg} alt="ABTS Logo" className="w-full h-full object-contain drop-shadow-md" />
             </div>
             <div className="flex flex-col">
               <span className={`font-bold text-lg leading-none ${isScrolled || location.pathname !== '/' ? 'text-slate-900' : 'text-slate-900 md:text-white'}`} style={{ fontFamily: 'var(--font-headings)' }}>

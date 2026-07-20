@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen } from 'lucide-react';
-
+import logoImg from '../../assets/LOGO.png';
 export default function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-400 py-16 border-t border-slate-900">
@@ -10,8 +9,8 @@ export default function Footer() {
           
           <div className="col-span-1 md:col-span-2">
             <Link to="/" className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-sky-600 text-white flex items-center justify-center rounded-xl shadow-lg">
-                <BookOpen size={20} />
+              <div className="w-12 h-12 flex items-center justify-center">
+                <img src={logoImg} alt="ABTS Logo" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col">
                 <span className="font-bold text-lg leading-none text-white" style={{ fontFamily: 'var(--font-headings)' }}>

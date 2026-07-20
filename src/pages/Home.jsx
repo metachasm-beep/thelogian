@@ -4,7 +4,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GraduationCap, Globe2, HeartHandshake, Users, Sparkles, ShieldCheck, Quote } from 'lucide-react';
 import BlurText from '../components/ui/BlurText';
-import gradImg from '../assets/grad.jpg';
+import heroBgImg from '../assets/bible-hyperreal-single-intact.jpg';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -121,8 +121,8 @@ export default function Home() {
         {/* Full Bleed Image with Vignette */}
         <div className="absolute inset-0 z-0">
           <img 
-            src={gradImg} 
-            alt="ABTS Graduation" 
+            src={heroBgImg} 
+            alt="ABTS Hero Background" 
             className="w-full h-full object-cover opacity-60"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90"></div>
