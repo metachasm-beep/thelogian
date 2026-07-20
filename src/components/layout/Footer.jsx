@@ -3,59 +3,48 @@ import { Link } from 'react-router-dom';
 import logoImg from '../../assets/LOGO_transparent.png';
 export default function Footer() {
   return (
-    <footer className="bg-slate-950 text-slate-400 py-16 border-t border-slate-900">
+    <footer className="bg-slate-950 text-slate-400 py-6 border-t border-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
           
-          <div className="col-span-1 md:col-span-2">
-            <Link to="/" className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 flex items-center justify-center">
+          {/* Logo & Info */}
+          <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
+            <Link to="/" className="flex items-center gap-3">
+              <div className="w-8 h-8 flex items-center justify-center">
                 <img src={logoImg} alt="ABTS Logo" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg leading-none text-white" style={{ fontFamily: 'var(--font-headings)' }}>
+                <span className="font-bold text-sm leading-none text-white tracking-widest uppercase" style={{ fontFamily: 'var(--font-headings)' }}>
                   ABTS
-                </span>
-                <span className="text-[0.65rem] uppercase tracking-widest font-semibold text-sky-400">
-                  New Delhi
                 </span>
               </div>
             </Link>
-            <div className="text-sm leading-relaxed max-w-sm">
-              <p>PLOT NO 1, BEHIND DILLI HAAT</p>
-              <p>OPP: INA MARKET, WEST KIDWAI NAGAR</p>
-              <p>NEW DELHI-110023, INDIA</p>
-              <p className="mt-2 text-sky-400">paoginmangte78u@gmail.com</p>
-              <p className="mt-1">+91-8851503372</p>
-              <p className="mt-1">+91-9599513372 (WhatsApp)</p>
+            
+            <div className="text-[0.65rem] md:text-xs uppercase tracking-widest flex flex-wrap justify-center sm:justify-start gap-2 sm:gap-4 text-slate-500 font-medium">
+              <span>New Delhi, India</span>
+              <span className="hidden sm:inline">|</span>
+              <a href="mailto:paoginmangte78u@gmail.com" className="hover:text-sky-400 transition-colors">paoginmangte78u@gmail.com</a>
+              <span className="hidden sm:inline">|</span>
+              <span>+91-8851503372</span>
             </div>
           </div>
 
-          <div>
-            <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm" style={{ fontFamily: 'var(--font-headings)' }}>Quick Links</h4>
-            <ul className="space-y-3 text-sm">
-              <li><Link to="/academic" className="hover:text-sky-400 transition-colors">Academics</Link></li>
-              <li><Link to="/online-application-form-for-admission" className="hover:text-sky-400 transition-colors">Apply Online</Link></li>
-              <li><Link to="/frequently-asked-questions" className="hover:text-sky-400 transition-colors">FAQs</Link></li>
-              <li><Link to="/contact-us" className="hover:text-sky-400 transition-colors">Contact</Link></li>
-            </ul>
+          {/* Minimal Links */}
+          <div className="flex flex-wrap justify-center gap-4 sm:gap-8 text-xs uppercase tracking-widest font-semibold text-slate-400">
+            <Link to="/academic" className="hover:text-sky-400 transition-colors">Academics</Link>
+            <Link to="/online-application-form-for-admission" className="hover:text-sky-400 transition-colors">Apply</Link>
+            <Link to="/objectives" className="hover:text-sky-400 transition-colors">Vision</Link>
+            <Link to="/contact-us" className="hover:text-sky-400 transition-colors">Contact</Link>
           </div>
-
-          <div>
-            <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm" style={{ fontFamily: 'var(--font-headings)' }}>About</h4>
-            <ul className="space-y-3 text-sm">
-              <li><Link to="/doctrinal-statement-of-faith" className="hover:text-sky-400 transition-colors">Statement of Faith</Link></li>
-              <li><Link to="/objectives" className="hover:text-sky-400 transition-colors">Our Objectives</Link></li>
-              <li><Link to="/abts-ministries" className="hover:text-sky-400 transition-colors">Ministries</Link></li>
-              <li><Link to="/gallery" className="hover:text-sky-400 transition-colors">Gallery</Link></li>
-            </ul>
-          </div>
-
+          
         </div>
         
-        <div className="mt-16 pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center text-sm text-slate-600">
-          <p>&copy; {new Date().getFullYear()} Apostolic Theological Seminary. All rights reserved.</p>
+        {/* Copyright */}
+        <div className="mt-6 pt-6 border-t border-slate-900 text-center text-[0.65rem] uppercase tracking-widest text-slate-600">
+          &copy; {new Date().getFullYear()} Apostolic Theological Seminary. All rights reserved.
         </div>
+
       </div>
     </footer>
   );

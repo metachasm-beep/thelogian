@@ -27,19 +27,18 @@ export default function Home() {
         });
       });
 
-      // Features Bento Box Animation
-      gsap.fromTo('.bento-item',
-        { opacity: 0, scale: 0.95, y: 40 },
+      // Features Editorial List Animation
+      gsap.fromTo('.feature-row',
+        { opacity: 0, y: 30 },
         {
           opacity: 1, 
-          scale: 1,
           y: 0, 
           duration: 0.8, 
           stagger: 0.1, 
-          ease: 'back.out(1.2)',
+          ease: 'power3.out',
           scrollTrigger: {
             trigger: featuresRef.current,
-            start: 'top 75%'
+            start: 'top 60%'
           }
         }
       );
@@ -181,38 +180,45 @@ export default function Home() {
         </div>
       </section>
       
-      {/* FEATURES GRID */}
-      <section ref={featuresRef} className="fold relative z-20 h-[100dvh] py-32 bg-white/95 backdrop-blur-md bg-grid-pattern border-y border-slate-200/50 flex flex-col justify-center shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight" style={{ fontFamily: 'var(--font-headings)' }}>
-              Why Choose ABTS?
-            </h2>
-            <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-              A modern approach to theological education that fits your life and ministry context.
-            </p>
-          </div>
+      {/* FEATURES EDITORIAL LIST */}
+      <section ref={featuresRef} className="fold relative z-20 min-h-[100dvh] py-32 bg-white flex flex-col justify-center shadow-[0_-20px_50px_rgba(0,0,0,0.05)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+          <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+            
+            {/* Left: Sticky Headline */}
+            <div className="lg:w-1/3">
+              <div className="sticky top-32">
+                <h2 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 tracking-tighter leading-[1.1]" style={{ fontFamily: 'var(--font-headings)' }}>
+                  Why Choose ABTS?
+                </h2>
+                <p className="text-xl text-slate-600 font-medium">
+                  A sophisticated, rigorous approach to theological education that fits your life and ministry context.
+                </p>
+              </div>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 auto-rows-[250px]">
-            {bentoFeatures.map((feat, idx) => {
-              const Icon = feat.icon;
-              return (
+            {/* Right: Fine-lined Feature List */}
+            <div className="lg:w-2/3 border-t border-slate-200">
+              {bentoFeatures.map((feat, idx) => (
                 <div 
                   key={idx}
-                  className={`bento-item rounded-3xl p-8 shadow-sm ring-1 ring-slate-900/5 ${feat.span} ${feat.bg} flex flex-col justify-between group overflow-hidden relative`}
+                  className="feature-row group py-8 border-b border-slate-200 flex flex-col sm:flex-row gap-6 sm:gap-12 hover:bg-slate-50 transition-colors px-4 -mx-4 sm:mx-0 sm:px-0"
                 >
-                  <div className="relative z-10">
-                    <Icon className={`w-10 h-10 mb-6 ${feat.iconColor}`} />
-                    <h3 className={`text-2xl font-bold mb-3 ${feat.text}`} style={{ fontFamily: 'var(--font-headings)' }}>
+                  <div className="text-slate-400 font-mono text-sm tracking-widest shrink-0 pt-1">
+                    {String(idx + 1).padStart(2, '0')}
+                  </div>
+                  <div>
+                    <h3 className="text-2xl font-bold mb-3 text-slate-900 tracking-tight" style={{ fontFamily: 'var(--font-headings)' }}>
                       {feat.title}
                     </h3>
+                    <p className="text-lg text-slate-600 font-medium leading-relaxed max-w-2xl">
+                      {feat.desc}
+                    </p>
                   </div>
-                  <p className={`text-lg relative z-10 font-medium leading-snug ${feat.descText}`}>
-                    {feat.desc}
-                  </p>
                 </div>
-              );
-            })}
+              ))}
+            </div>
+
           </div>
         </div>
       </section>
