@@ -14,6 +14,8 @@ import GraduationLayout from '../components/academics/GraduationLayout';
 import RecipientsLayout from '../components/academics/RecipientsLayout';
 import ContactLayout from '../components/contact/ContactLayout';
 import TestimonialsLayout from '../components/contact/TestimonialsLayout';
+import FAQLayout from '../components/apply/FAQLayout';
+import EnquiryLayout from '../components/apply/EnquiryLayout';
 
 export default function Subpage() {
   const { slug } = useParams();
@@ -94,6 +96,10 @@ export default function Subpage() {
               <ContactLayout />
             ) : slug === 'testimonials' ? (
               <TestimonialsLayout />
+            ) : slug === 'frequently-asked-questions' ? (
+              <FAQLayout />
+            ) : slug === 'online-enquiry' ? (
+              <EnquiryLayout />
             ) : (
               <RichText content={content} />
             )}
