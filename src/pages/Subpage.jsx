@@ -30,27 +30,24 @@ export default function Subpage() {
           
           {/* Sidebar Navigation */}
           <aside className="w-full lg:w-72 lg:sticky lg:top-24 shrink-0">
-            <div className="bg-white rounded-2xl p-6 cardstock-elevation">
+            <div className="p-6">
               <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6" style={{ fontFamily: 'var(--font-headings)' }}>
                 {meta.category}
               </h3>
-              <nav className="flex flex-col space-y-1">
+              <nav className="flex flex-col space-y-1 border-l border-slate-200">
                 {sidebarLinks.map((link, idx) => {
                   const isActive = path === link.path;
                   return (
                     <Link 
                       key={idx} 
                       to={link.path}
-                      className={`group flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                      className={`group flex items-center justify-between px-4 py-3 text-sm font-bold transition-all -ml-[1px] border-l ${
                         isActive 
-                          ? 'bg-[#1e3a8a] text-white shadow-md shadow-[#1e3a8a]/20' 
-                          : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                          ? 'border-slate-900 text-slate-900' 
+                          : 'border-transparent text-slate-400 hover:text-slate-900 hover:border-slate-300'
                       }`}
                     >
                       <span>{link.title}</span>
-                      {isActive && (
-                        <ChevronRight className="w-4 h-4 text-[#b45309]" />
-                      )}
                     </Link>
                   );
                 })}
@@ -59,7 +56,7 @@ export default function Subpage() {
           </aside>
 
           {/* Main Content Area */}
-          <article className="w-full max-w-3xl rounded-3xl p-8 md:p-12 lg:p-16 cardstock-elevation relative min-h-[600px]">
+          <article className="w-full max-w-3xl p-4 md:p-8 relative min-h-[600px]">
             
             {/* Breadcrumb */}
             <div className="flex items-center text-sm text-slate-500 mb-8 md:mb-12 font-medium">
