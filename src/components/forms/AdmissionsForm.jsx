@@ -4,15 +4,52 @@ import { Send, CheckCircle } from 'lucide-react';
 export default function AdmissionsForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    dob: '',
+    email: '',
+    phone: '',
+    program: '',
+    previousEducation: '',
+    testimony: ''
+  });
+
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwyAYIpd7PVCPsPcMeGAWudk9of93p4v4sUMU8yka2gih9OfLjnZUMZhRY31X3zjDIfyw/exec';
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+    setError(null);
+    
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      const result = await response.json();
+      
+      if (result.result === 'success') {
+        setSubmitted(true);
+      } else {
+        throw new Error(result.error || 'Failed to submit application');
+      }
+    } catch (err) {
+      console.error('Submission error:', err);
+      setError('An error occurred while submitting your application. Please try again.');
+    } finally {
       setLoading(false);
-      setSubmitted(true);
-    }, 1500);
+    }
   };
 
   if (submitted) {
@@ -43,32 +80,74 @@ export default function AdmissionsForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        {error && (
+          <div className="p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 text-sm font-medium">
+            {error}
+          </div>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-700">Full Name <span className="text-red-500">*</span></label>
-            <input required type="text" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" placeholder="John Doe" />
+            <input 
+              required 
+              type="text" 
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" 
+              placeholder="John Doe" 
+            />
           </div>
           
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-700">Date of Birth <span className="text-red-500">*</span></label>
-            <input required type="date" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-600" />
+            <input 
+              required 
+              type="date" 
+              name="dob"
+              value={formData.dob}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-600" 
+            />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-700">Email Address <span className="text-red-500">*</span></label>
-            <input required type="email" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" placeholder="john@example.com" />
+            <input 
+              required 
+              type="email" 
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" 
+              placeholder="john@example.com" 
+            />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-700">Phone Number <span className="text-red-500">*</span></label>
-            <input required type="tel" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" placeholder="+91 XXXXX XXXXX" />
+            <input 
+              required 
+              type="tel" 
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" 
+              placeholder="+91 XXXXX XXXXX" 
+            />
           </div>
         </div>
 
         <div className="space-y-2 pt-4">
           <label className="text-sm font-bold text-slate-700">Desired Program <span className="text-red-500">*</span></label>
-          <select required className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-700 appearance-none">
-            <option value="" disabled selected>Select a program...</option>
+          <select 
+            required 
+            name="program"
+            value={formData.program}
+            onChange={handleChange}
+            className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all text-slate-700 appearance-none"
+          >
+            <option value="" disabled>Select a program...</option>
             <option value="c-th">Certificate in Theology (C.Th.)</option>
             <option value="dip-th">Diploma in Theology (Dip.Th.)</option>
             <option value="b-th">Bachelor of Theology (B.Th.)</option>
@@ -81,6 +160,9 @@ export default function AdmissionsForm() {
         <div className="space-y-2 pt-4">
           <label className="text-sm font-bold text-slate-700">Previous Educational Qualifications</label>
           <textarea 
+            name="previousEducation"
+            value={formData.previousEducation}
+            onChange={handleChange}
             rows="3" 
             className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all resize-none" 
             placeholder="List your previous degrees, institutions, and year of graduation..."
@@ -91,6 +173,9 @@ export default function AdmissionsForm() {
           <label className="text-sm font-bold text-slate-700">Personal Testimony / Statement of Purpose <span className="text-red-500">*</span></label>
           <textarea 
             required 
+            name="testimony"
+            value={formData.testimony}
+            onChange={handleChange}
             rows="5" 
             className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all resize-none" 
             placeholder="Briefly share your salvation testimony and why you wish to study at ABTS..."

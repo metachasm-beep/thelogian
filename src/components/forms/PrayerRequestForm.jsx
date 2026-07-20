@@ -4,15 +4,53 @@ import { Send, Heart } from 'lucide-react';
 export default function PrayerRequestForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const handleSubmit = (e) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    request: '',
+    confidential: false
+  });
+
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwzgyKMKHBK4wzahxzhCcoBxJENpr6-wYOagdVSbfWFtkIYS1lhVa3uxBpHXKrKIIZB/exec';
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
+    setError(null);
+    
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        // Using text/plain prevents CORS preflight requests which GAS rejects
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      const result = await response.json();
+      
+      if (result.result === 'success') {
+        setSubmitted(true);
+      } else {
+        throw new Error(result.error || 'Failed to submit request');
+      }
+    } catch (err) {
+      console.error('Submission error:', err);
+      setError('An error occurred while submitting your prayer request. Please try again.');
+    } finally {
       setLoading(false);
-      setSubmitted(true);
-    }, 1200);
+    }
   };
 
   if (submitted) {
@@ -43,15 +81,36 @@ export default function PrayerRequestForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
+        
+        {error && (
+          <div className="p-4 bg-red-50 text-red-600 rounded-xl border border-red-100 text-sm font-medium">
+            {error}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-700">Name (Optional)</label>
-            <input type="text" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" placeholder="Your Name" />
+            <input 
+              type="text" 
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" 
+              placeholder="Your Name" 
+            />
           </div>
 
           <div className="space-y-2">
             <label className="text-sm font-bold text-slate-700">Email (Optional)</label>
-            <input type="email" className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" placeholder="your@email.com" />
+            <input 
+              type="email" 
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all" 
+              placeholder="your@email.com" 
+            />
           </div>
         </div>
 
@@ -59,6 +118,9 @@ export default function PrayerRequestForm() {
           <label className="text-sm font-bold text-slate-700">Prayer Request Details <span className="text-red-500">*</span></label>
           <textarea 
             required 
+            name="request"
+            value={formData.request}
+            onChange={handleChange}
             rows="6" 
             className="w-full px-4 py-3 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary transition-all resize-none" 
             placeholder="How can we pray for you?"
@@ -69,6 +131,9 @@ export default function PrayerRequestForm() {
           <input 
             type="checkbox" 
             id="confidential" 
+            name="confidential"
+            checked={formData.confidential}
+            onChange={handleChange}
             className="mt-1 w-4 h-4 text-brand-primary bg-slate-100 border-slate-300 rounded focus:ring-brand-primary"
           />
           <label htmlFor="confidential" className="text-sm text-slate-600 leading-relaxed cursor-pointer">
