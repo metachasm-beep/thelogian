@@ -55,10 +55,10 @@ export default function Home() {
       desc: 'Rigorous theological education taught by experienced, world-class faculty.', 
       icon: GraduationCap,
       span: 'md:col-span-2 md:row-span-2',
-      bg: 'bg-sky-900',
+      bg: 'bg-[#1e3a8a]',
       text: 'text-white',
-      descText: 'text-sky-100',
-      iconColor: 'text-sky-300'
+      descText: 'text-blue-100',
+      iconColor: 'text-[#b45309]'
     },
     { 
       title: 'Flexible Education', 
@@ -115,44 +115,52 @@ export default function Home() {
   return (
     <div className="bg-slate-50 bg-tactile-noise min-h-screen">
       
-      {/* HERO SECTION */}
-      <section className="relative min-h-screen flex items-center justify-center pt-20 px-4 overflow-hidden">
+      {/* HERO SECTION - CINEMATIC FULL BLEED */}
+      <section className="relative min-h-screen flex items-center justify-center pt-20 px-4 overflow-hidden bg-black">
+        {/* Full Bleed Image with Vignette */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[500px] bg-sky-200/30 blur-[120px] rounded-full pointer-events-none"></div>
+          <img 
+            src="/assets/grad.jpg" 
+            alt="ABTS Graduation" 
+            className="w-full h-full object-cover opacity-60"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)]"></div>
         </div>
+
         <div className="relative z-10 text-center max-w-5xl mx-auto">
           <div className="mb-8 flex justify-center">
-             <div className="px-4 py-1.5 rounded-full border border-sky-200 bg-sky-50 text-sky-700 text-xs font-bold uppercase tracking-widest shadow-sm">
+             <div className="px-4 py-1.5 rounded-full border border-white/20 bg-white/10 text-white/90 backdrop-blur-md text-xs font-bold uppercase tracking-widest shadow-sm">
                 Empowering Leaders
              </div>
           </div>
           
-          <div className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-slate-900 mb-8 leading-[1.1]" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <div className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-white mb-8 leading-[1.1]" style={{ fontFamily: 'var(--font-headings)' }}>
             <BlurText 
               text="Rooted in Scripture."
               delay={50}
               animateBy="words"
               direction="top"
-              className="justify-center"
+              className="justify-center drop-shadow-xl"
             />
             <BlurText 
               text="Equipped for Service."
               delay={50}
               animateBy="words"
               direction="bottom"
-              className="justify-center text-slate-400 mt-2"
+              className="justify-center text-[#b45309] mt-2 drop-shadow-xl"
             />
           </div>
           
-          <p className="text-lg md:text-2xl text-slate-600 font-medium mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-2xl text-white/80 font-medium mb-12 max-w-3xl mx-auto leading-relaxed">
             Apostolic Biblical Theological Seminary brings rigorous, world-class theological education directly to you.
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-6">
-            <Link to="/online-application-form-for-admission" className="group relative px-8 py-4 bg-sky-700 text-white rounded-full font-semibold overflow-hidden transition-all hover:scale-105 shadow-xl shadow-sky-900/20">
+            <Link to="/online-application-form-for-admission" className="group relative px-8 py-4 bg-[#b45309] text-white rounded-full font-semibold overflow-hidden transition-all hover:scale-105 shadow-xl shadow-black/50">
               <span className="relative z-10">Apply Online</span>
             </Link>
-            <Link to="/objectives" className="px-8 py-4 rounded-full border border-slate-300 text-slate-700 bg-white font-semibold hover:border-slate-900 hover:text-slate-900 transition-all shadow-sm">
+            <Link to="/objectives" className="px-8 py-4 rounded-full border border-white/30 text-white bg-white/10 backdrop-blur-sm font-semibold hover:bg-white/20 transition-all shadow-sm">
               Read Our Vision
             </Link>
           </div>
@@ -163,7 +171,7 @@ export default function Home() {
       <section ref={featuresRef} className="py-32 bg-white/40 bg-grid-pattern border-y border-slate-200/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            <h2 className="text-4xl md:text-6xl font-bold text-slate-900 mb-6 tracking-tight" style={{ fontFamily: 'var(--font-headings)' }}>
               Why Choose ABTS?
             </h2>
             <p className="text-xl text-slate-600 max-w-2xl mx-auto">
@@ -181,7 +189,7 @@ export default function Home() {
                 >
                   <div className="relative z-10">
                     <Icon className={`w-10 h-10 mb-6 ${feat.iconColor}`} />
-                    <h3 className={`text-2xl font-bold mb-3 ${feat.text}`} style={{ fontFamily: 'Poppins, sans-serif' }}>
+                    <h3 className={`text-2xl font-bold mb-3 ${feat.text}`} style={{ fontFamily: 'var(--font-headings)' }}>
                       {feat.title}
                     </h3>
                   </div>
@@ -202,12 +210,12 @@ export default function Home() {
         </div>
         <div className="testimonial-content max-w-4xl mx-auto text-center relative z-10">
           <Quote className="w-16 h-16 text-sky-400 mx-auto mb-10 opacity-50" />
-          <h2 className="text-3xl md:text-5xl font-medium text-slate-800 leading-tight mb-12">
+          <h2 className="text-3xl md:text-5xl font-bold text-slate-800 leading-tight mb-12" style={{ fontFamily: 'var(--font-headings)' }}>
             "God often shapes His servants within the very contexts where they are already serving. Our programs are designed to complement your ministry."
           </h2>
           <div className="inline-block">
-            <div className="font-bold text-slate-900 text-lg uppercase tracking-widest" style={{ fontFamily: 'Poppins, sans-serif' }}>Dr. C.P. Thomas</div>
-            <div className="text-sky-600 font-medium">Founder & President</div>
+            <div className="font-bold text-slate-900 text-lg uppercase tracking-widest">Dr. C.P. Thomas</div>
+            <div className="text-[#b45309] font-medium">Founder & President</div>
           </div>
         </div>
       </section>

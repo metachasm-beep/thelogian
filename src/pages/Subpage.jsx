@@ -41,7 +41,7 @@ export default function Subpage() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-[400px] bg-sky-900/30 blur-[120px] rounded-full pointer-events-none"></div>
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-headings)' }}>
             {meta.title}
           </h1>
           <div className="w-24 h-1 bg-sky-500 mx-auto rounded-full shadow-[0_0_15px_rgba(14,165,233,0.5)]"></div>
@@ -53,8 +53,8 @@ export default function Subpage() {
           
           {/* Sidebar Navigation */}
           <aside className="w-full lg:w-72 lg:sticky lg:top-24 shrink-0">
-            <div className="bg-white rounded-2xl p-6 shadow-sm ring-1 ring-slate-900/5">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6" style={{ fontFamily: 'Poppins, sans-serif' }}>
+            <div className="bg-white rounded-2xl p-6 cardstock-elevation">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6" style={{ fontFamily: 'var(--font-headings)' }}>
                 {meta.category}
               </h3>
               <nav className="flex flex-col space-y-1">
@@ -66,13 +66,13 @@ export default function Subpage() {
                       to={link.path}
                       className={`group flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                         isActive 
-                          ? 'bg-sky-50 text-sky-700' 
+                          ? 'bg-[#1e3a8a] text-white shadow-md shadow-[#1e3a8a]/20' 
                           : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                       }`}
                     >
                       <span>{link.title}</span>
                       {isActive && (
-                        <ChevronRight className="w-4 h-4 text-sky-500" />
+                        <ChevronRight className="w-4 h-4 text-[#b45309]" />
                       )}
                     </Link>
                   );
@@ -82,7 +82,7 @@ export default function Subpage() {
           </aside>
 
           {/* Main Content Area */}
-          <article className="w-full max-w-4xl bg-white rounded-3xl p-8 md:p-12 lg:p-16 shadow-sm ring-1 ring-slate-900/5 relative min-h-[600px]">
+          <article className="w-full max-w-3xl rounded-3xl p-8 md:p-12 lg:p-16 cardstock-elevation relative min-h-[600px]">
             
             {/* Breadcrumb */}
             <div className="flex items-center text-sm text-slate-500 mb-8 md:mb-12 font-medium">
@@ -112,11 +112,11 @@ export default function Subpage() {
                       </div>
                     );
                   },
-                  h1: ({node, ...props}) => <h1 className="text-3xl md:text-4xl font-bold mt-12 mb-6 text-slate-900 tracking-tight pb-4 border-b border-slate-100" style={{ fontFamily: 'Poppins, sans-serif' }} {...props} />,
-                  h2: ({node, ...props}) => <h2 className="text-2xl md:text-3xl font-bold mt-10 mb-4 text-slate-800 tracking-tight" style={{ fontFamily: 'Poppins, sans-serif' }} {...props} />,
-                  h3: ({node, ...props}) => <h3 className="text-xl md:text-2xl font-semibold mt-8 mb-3 text-slate-700 tracking-tight" style={{ fontFamily: 'Poppins, sans-serif' }} {...props} />,
+                  h1: ({node, ...props}) => <h1 className="text-3xl md:text-4xl font-bold mt-12 mb-6 text-slate-900 tracking-tight pb-4 border-b border-slate-100" style={{ fontFamily: 'var(--font-headings)' }} {...props} />,
+                  h2: ({node, ...props}) => <h2 className="text-2xl md:text-3xl font-bold mt-10 mb-4 text-slate-800 tracking-tight" style={{ fontFamily: 'var(--font-headings)' }} {...props} />,
+                  h3: ({node, ...props}) => <h3 className="text-xl md:text-2xl font-semibold mt-8 mb-3 text-slate-700 tracking-tight" style={{ fontFamily: 'var(--font-headings)' }} {...props} />,
                   p: ({node, ...props}) => <p className="leading-relaxed mb-6 text-slate-600 font-medium" {...props} />,
-                  a: ({node, ...props}) => <a className="text-sky-600 hover:text-sky-800 font-bold decoration-sky-200 underline-offset-4 transition-colors" {...props} />,
+                  a: ({node, ...props}) => <a className="text-[#1e3a8a] hover:text-[#1e3a8a]/80 font-bold decoration-[#1e3a8a]/30 underline-offset-4 transition-colors" {...props} />,
                   ul: ({node, ...props}) => <ul className="mb-6 space-y-3 text-slate-600 list-none pl-0" {...props} />,
                   li: ({node, ...props}) => (
                     <li className="flex items-start">

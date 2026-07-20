@@ -14,7 +14,7 @@ export default function Footer() {
                 <BookOpen size={20} />
               </div>
               <div className="flex flex-col">
-                <span className="font-bold text-lg leading-none text-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                <span className="font-bold text-lg leading-none text-white" style={{ fontFamily: 'var(--font-headings)' }}>
                   ABTS
                 </span>
                 <span className="text-[0.65rem] uppercase tracking-widest font-semibold text-sky-400">
@@ -28,7 +28,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm" style={{ fontFamily: 'Poppins, sans-serif' }}>Quick Links</h4>
+            <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm" style={{ fontFamily: 'var(--font-headings)' }}>Quick Links</h4>
             <ul className="space-y-3 text-sm">
               <li><Link to="/academic" className="hover:text-sky-400 transition-colors">Academics</Link></li>
               <li><Link to="/online-application-form-for-admission" className="hover:text-sky-400 transition-colors">Apply Online</Link></li>
@@ -38,7 +38,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm" style={{ fontFamily: 'Poppins, sans-serif' }}>About</h4>
+            <h4 className="text-white font-bold mb-6 tracking-wide uppercase text-sm" style={{ fontFamily: 'var(--font-headings)' }}>About</h4>
             <ul className="space-y-3 text-sm">
               <li><Link to="/doctrinal-statement-of-faith" className="hover:text-sky-400 transition-colors">Statement of Faith</Link></li>
               <li><Link to="/objectives" className="hover:text-sky-400 transition-colors">Our Objectives</Link></li>

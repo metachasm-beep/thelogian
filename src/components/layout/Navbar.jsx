@@ -39,7 +39,7 @@ export default function Navbar() {
               <BookOpen size={20} />
             </div>
             <div className="flex flex-col">
-              <span className={`font-bold text-lg leading-none ${isScrolled || location.pathname !== '/' ? 'text-slate-900' : 'text-slate-900 md:text-white'}`} style={{ fontFamily: 'Poppins, sans-serif' }}>
+              <span className={`font-bold text-lg leading-none ${isScrolled || location.pathname !== '/' ? 'text-slate-900' : 'text-slate-900 md:text-white'}`} style={{ fontFamily: 'var(--font-headings)' }}>
                 ABTS
               </span>
               <span className={`text-[0.65rem] uppercase tracking-widest font-semibold ${isScrolled || location.pathname !== '/' ? 'text-sky-700' : 'text-sky-700 md:text-sky-300'}`}>
