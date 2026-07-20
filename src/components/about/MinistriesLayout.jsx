@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const ministries = [
   {
@@ -80,9 +81,9 @@ export default function MinistriesLayout() {
         <p className="text-slate-700 font-medium max-w-2xl mx-auto mb-6">
           We need your prayers, support, and involvement. Your donation aids us as we preach the Gospel in remote and unreached areas.
         </p>
-        <div className="inline-block px-6 py-3 bg-slate-900 text-white font-bold tracking-widest text-sm uppercase">
+        <Link to="/prayer-request" className="inline-block px-6 py-3 bg-slate-900 text-white font-bold tracking-widest text-sm uppercase hover:bg-sky-600 transition-colors rounded-full shadow-lg">
           Pray For Us
-        </div>
+        </Link>
       </div>
     </div>
   );

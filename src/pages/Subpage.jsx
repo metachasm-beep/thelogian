@@ -9,6 +9,9 @@ import ObjectivesLayout from '../components/about/ObjectivesLayout';
 import FaithLayout from '../components/about/FaithLayout';
 import MinistriesLayout from '../components/about/MinistriesLayout';
 import NewsLayout from '../components/about/NewsLayout';
+import ProgramsLayout from '../components/academics/ProgramsLayout';
+import GraduationLayout from '../components/academics/GraduationLayout';
+import RecipientsLayout from '../components/academics/RecipientsLayout';
 
 export default function Subpage() {
   const { slug } = useParams();
@@ -79,6 +82,12 @@ export default function Subpage() {
               <MinistriesLayout />
             ) : slug === 'news' ? (
               <NewsLayout />
+            ) : slug === 'academic' ? (
+              <ProgramsLayout />
+            ) : slug === 'list-of-graduation' ? (
+              <GraduationLayout />
+            ) : slug === 'prominent-doctorate-recipients-of-abts' ? (
+              <RecipientsLayout />
             ) : (
               <RichText content={content} />
             )}
