@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { GraduationCap, Globe2, HeartHandshake, Users, Sparkles, ShieldCheck, Quote } from 'lucide-react';
@@ -10,6 +10,7 @@ import heroBgImg from '../assets/bible-hyperreal-single-intact.jpg';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Home() {
+  const navigate = useNavigate();
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -27,23 +28,24 @@ export default function Home() {
       });
 
       // Initial state: Hide all folds except the first one
-      gsap.set(folds.slice(1), { autoAlpha: 0 });
+      gsap.set(folds.slice(1), { autoAlpha: 0, pointerEvents: 'none' });
+      gsap.set(folds[0], { pointerEvents: 'auto' });
 
-      // Step 1: Hero out, Features in
-      tl.to(folds[0], { autoAlpha: 0, duration: 1 })
-        .to(folds[1], { autoAlpha: 1, duration: 1 }, '<')
+      // When each fold becomes active, restore pointer events
+      tl.to(folds[0], { autoAlpha: 0, pointerEvents: 'none', duration: 1 })
+        .to(folds[1], { autoAlpha: 1, pointerEvents: 'auto', duration: 1 }, '<')
         .fromTo('.feature-row', { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.5 }, '<0.5')
         .to({}, { duration: 0.5 }) // pause
         
       // Step 2: Features out, Testimonial in
-        .to(folds[1], { autoAlpha: 0, duration: 1 })
-        .to(folds[2], { autoAlpha: 1, duration: 1 }, '<')
+        .to(folds[1], { autoAlpha: 0, pointerEvents: 'none', duration: 1 })
+        .to(folds[2], { autoAlpha: 1, pointerEvents: 'auto', duration: 1 }, '<')
         .fromTo('.testimonial-content', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 }, '<0.5')
         .to({}, { duration: 0.5 }) // pause
         
       // Step 3: Testimonial out, Academics in
-        .to(folds[2], { autoAlpha: 0, duration: 1 })
-        .to(folds[3], { autoAlpha: 1, duration: 1 }, '<')
+        .to(folds[2], { autoAlpha: 0, pointerEvents: 'none', duration: 1 })
+        .to(folds[3], { autoAlpha: 1, pointerEvents: 'auto', duration: 1 }, '<')
         .fromTo('.academic-item', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, stagger: 0.1, duration: 0.5 }, '<0.5')
         .to({}, { duration: 0.5 }); // pause at the end
         
@@ -66,8 +68,8 @@ export default function Home() {
       
       <div className="folds-wrapper h-[100dvh] relative overflow-hidden">
         
-        {/* HERO SECTION (Fold 1) */}
-        <section className="fold absolute inset-0 z-10 flex items-center justify-center pt-20 px-4 bg-black">
+        {/* HERO SECTION (Fold 1) — highest z so buttons are always clickable */}
+        <section className="fold absolute inset-0 z-40 flex items-center justify-center pt-20 px-4 bg-black">
           <div className="absolute inset-0 z-0">
             <img 
               src={heroBgImg} 
@@ -107,10 +109,18 @@ export default function Home() {
             </p>
             
             <div className="flex flex-col sm:flex-row justify-center gap-6">
-              <Link to="/online-application-form-for-admission" className="group relative px-8 py-4 bg-[#b45309] text-white rounded-full font-semibold overflow-hidden transition-all hover:scale-105 shadow-xl shadow-black/50">
+              <Link
+                to="/online-application-form-for-admission"
+                onClick={() => navigate('/online-application-form-for-admission')}
+                className="group relative px-8 py-4 bg-[#b45309] text-white rounded-full font-semibold overflow-hidden transition-all hover:scale-105 shadow-xl shadow-black/50"
+              >
                 <span className="relative z-10">Apply Online</span>
               </Link>
-              <Link to="/objectives" className="px-8 py-4 rounded-full border border-white/30 text-white bg-white/10 backdrop-blur-sm font-semibold hover:bg-white/20 transition-all shadow-sm">
+              <Link
+                to="/objectives"
+                onClick={() => navigate('/objectives')}
+                className="px-8 py-4 rounded-full border border-white/30 text-white bg-white/10 backdrop-blur-sm font-semibold hover:bg-white/20 transition-all shadow-sm"
+              >
                 Read Our Vision
               </Link>
             </div>
