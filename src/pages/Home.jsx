@@ -28,24 +28,25 @@ export default function Home() {
       });
 
       // Initial state: Hide all folds except the first one
-      gsap.set(folds.slice(1), { autoAlpha: 0, pointerEvents: 'none' });
-      gsap.set(folds[0], { pointerEvents: 'auto' });
+      // autoAlpha sets opacity:0 AND visibility:hidden — visibility:hidden blocks pointer events natively
+      gsap.set(folds.slice(1), { autoAlpha: 0 });
+      gsap.set(folds[0], { autoAlpha: 1 });
 
-      // When each fold becomes active, restore pointer events
-      tl.to(folds[0], { autoAlpha: 0, pointerEvents: 'none', duration: 1 })
-        .to(folds[1], { autoAlpha: 1, pointerEvents: 'auto', duration: 1 }, '<')
+      // Step 1: Hero out, Features in
+      tl.to(folds[0], { autoAlpha: 0, duration: 1 })
+        .to(folds[1], { autoAlpha: 1, duration: 1 }, '<')
         .fromTo('.feature-row', { opacity: 0, y: 30 }, { opacity: 1, y: 0, stagger: 0.1, duration: 0.5 }, '<0.5')
         .to({}, { duration: 0.5 }) // pause
         
       // Step 2: Features out, Testimonial in
-        .to(folds[1], { autoAlpha: 0, pointerEvents: 'none', duration: 1 })
-        .to(folds[2], { autoAlpha: 1, pointerEvents: 'auto', duration: 1 }, '<')
+        .to(folds[1], { autoAlpha: 0, duration: 1 })
+        .to(folds[2], { autoAlpha: 1, duration: 1 }, '<')
         .fromTo('.testimonial-content', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 0.5 }, '<0.5')
         .to({}, { duration: 0.5 }) // pause
         
       // Step 3: Testimonial out, Academics in
-        .to(folds[2], { autoAlpha: 0, pointerEvents: 'none', duration: 1 })
-        .to(folds[3], { autoAlpha: 1, pointerEvents: 'auto', duration: 1 }, '<')
+        .to(folds[2], { autoAlpha: 0, duration: 1 })
+        .to(folds[3], { autoAlpha: 1, duration: 1 }, '<')
         .fromTo('.academic-item', { opacity: 0, scale: 0.9 }, { opacity: 1, scale: 1, stagger: 0.1, duration: 0.5 }, '<0.5')
         .to({}, { duration: 0.5 }); // pause at the end
         
@@ -127,8 +128,8 @@ export default function Home() {
           </div>
         </section>
         
-        {/* FEATURES EDITORIAL LIST (Fold 2) */}
-        <section className="fold absolute inset-0 z-20 flex flex-col justify-center bg-white shadow-[0_-20px_50px_rgba(0,0,0,0.05)] pt-16">
+        {/* FEATURES EDITORIAL LIST (Fold 2) — z-30, below hero */}
+        <section className="fold absolute inset-0 z-30 flex flex-col justify-center bg-white shadow-[0_-20px_50px_rgba(0,0,0,0.05)] pt-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-24">
               <div className="lg:w-1/3 pt-12">
@@ -164,8 +165,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* TESTIMONIAL (Fold 3) */}
-        <section className="fold absolute inset-0 z-30 px-4 overflow-hidden bg-slate-50 flex items-center justify-center shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
+        {/* TESTIMONIAL (Fold 3) — z-20, below fold 2 */}
+        <section className="fold absolute inset-0 z-20 px-4 overflow-hidden bg-slate-50 flex items-center justify-center shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[30rem] font-serif font-black text-slate-200 opacity-20 pointer-events-none select-none">
             "
           </div>
@@ -181,8 +182,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ACADEMICS (Fold 4) */}
-        <section className="fold absolute inset-0 z-40 bg-slate-950 flex flex-col items-center justify-center px-4 overflow-hidden">
+        {/* ACADEMICS (Fold 4) — z-10, lowest, hero (z-40) always wins */}
+        <section className="fold absolute inset-0 z-10 bg-slate-950 flex flex-col items-center justify-center px-4 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(2,132,199,0.15),rgba(255,255,255,0))] pointer-events-none"></div>
           
           <div className="relative z-10 text-center max-w-5xl mx-auto">
