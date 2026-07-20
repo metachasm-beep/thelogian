@@ -11,12 +11,12 @@ gsap.registerPlugin(ScrollTrigger);
 
 /* ─────────────────────────────────────────────
    DESKTOP: Crossfade-scrub pinned stack
+   Unchanged from original implementation.
 ───────────────────────────────────────────── */
 function DesktopHome({ navigate, bentoFeatures }) {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const folds = gsap.utils.toArray('.fold');
-
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: '.folds-wrapper',
@@ -49,7 +49,7 @@ function DesktopHome({ navigate, bentoFeatures }) {
   return (
     <div className="folds-wrapper h-[100dvh] relative overflow-hidden">
 
-      {/* HERO (Fold 1) — z-40 highest */}
+      {/* HERO (Fold 1) — z-40 highest so buttons always clickable */}
       <section className="fold absolute inset-0 z-40 flex items-center justify-center pt-20 px-4 bg-black">
         <div className="absolute inset-0 z-0">
           <img src={heroBgImg} alt="ABTS Hero Background" className="w-full h-full object-cover opacity-60" />
@@ -149,49 +149,50 @@ function DesktopHome({ navigate, bentoFeatures }) {
 }
 
 /* ─────────────────────────────────────────────
-   MOBILE: Vertical Parallax Drift
-   Each fold is a full-height section in normal
-   document flow. The background image scrolls
-   at 0.5× speed (parallax drift). Text stays
-   fixed within its section.
+   MOBILE: Scale-Up Reveal
+   Each fold sits in normal document flow.
+   Entering fold:  scale 0.86 → 1.0 + fade in
+   Exiting fold:   scale 1.0  → 1.07 + fade out
+   Creates a "press into the page" depth feel.
+   No pinning — works perfectly with iOS scroll.
 ───────────────────────────────────────────── */
 function MobileHome({ navigate, bentoFeatures }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Parallax: bg images move at half scroll speed
       gsap.utils.toArray('.m-fold').forEach((fold) => {
-        const bg = fold.querySelector('.m-parallax-bg');
-        if (!bg) return;
-        gsap.fromTo(bg,
-          { yPercent: -12 },
+        const inner = fold.querySelector('.m-fold-inner');
+        if (!inner) return;
+
+        // ── ENTER: scale up from 0.86 → 1, fade in ──
+        gsap.fromTo(inner,
+          { scale: 0.86, opacity: 0, transformOrigin: 'center center' },
           {
-            yPercent: 12,
+            scale: 1,
+            opacity: 1,
             ease: 'none',
             scrollTrigger: {
               trigger: fold,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: true,
+              start: 'top 95%',
+              end: 'top 10%',
+              scrub: 0.8,
             }
           }
         );
-      });
 
-      // Fade-in text as each fold enters viewport
-      gsap.utils.toArray('.m-fold-content').forEach((content) => {
-        gsap.fromTo(content,
-          { opacity: 0, y: 28 },
+        // ── EXIT: scale up to 1.07, fade away ──
+        gsap.fromTo(inner,
+          { scale: 1, opacity: 1 },
           {
-            opacity: 1,
-            y: 0,
-            duration: 0.6,
-            ease: 'power2.out',
+            scale: 1.07,
+            opacity: 0,
+            ease: 'none',
             scrollTrigger: {
-              trigger: content,
-              start: 'top 80%',
-              toggleActions: 'play none none reverse',
+              trigger: fold,
+              start: 'top -5%',
+              end: 'top -55%',
+              scrub: 0.8,
             }
           }
         );
@@ -204,115 +205,106 @@ function MobileHome({ navigate, bentoFeatures }) {
     <div ref={containerRef}>
 
       {/* ── HERO ── */}
-      <section className="m-fold relative h-[100dvh] overflow-hidden bg-black flex items-center justify-center px-5">
-        {/* Parallax background */}
-        <div className="m-parallax-bg absolute inset-[-15%] z-0">
-          <img src={heroBgImg} alt="ABTS Hero" className="w-full h-full object-cover opacity-55" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-black/80" />
-        </div>
-
-        <div className="m-fold-content relative z-10 text-center px-2 w-full max-w-sm mx-auto pt-16">
-          {/* Badge */}
-          <div className="inline-block px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white/80 text-[10px] font-bold uppercase tracking-widest mb-6">
-            Empowering Leaders
-          </div>
-
-          {/* Headline — tighter for mobile */}
-          <h1 className="text-[2.4rem] font-black text-white tracking-tighter leading-[1.05] mb-5" style={{ fontFamily: 'var(--font-headings)' }}>
-            Rooted in<br />
-            <span className="text-[#b45309]">Scripture.</span><br />
-            Equipped for<br />
-            <span className="text-[#b45309]">Service.</span>
-          </h1>
-
-          <p className="text-sm text-white/70 font-medium mb-10 leading-relaxed mx-auto max-w-[280px]">
-            World-class apostolic theological education, delivered directly to you — wherever you serve.
-          </p>
-
-          <div className="flex flex-col gap-3 w-full max-w-[260px] mx-auto">
-            <Link
-              to="/online-application-form-for-admission"
-              onClick={() => navigate('/online-application-form-for-admission')}
-              className="w-full py-4 bg-[#b45309] text-white rounded-full font-bold text-sm tracking-wide shadow-lg text-center"
-            >
-              Apply Online
-            </Link>
-            <Link
-              to="/objectives"
-              onClick={() => navigate('/objectives')}
-              className="w-full py-4 rounded-full border border-white/30 text-white bg-white/10 font-semibold text-sm text-center"
-            >
-              Read Our Vision
-            </Link>
+      <section className="m-fold relative h-[100dvh] overflow-hidden bg-black">
+        <div className="m-fold-inner absolute inset-0 flex items-center justify-center px-5" style={{ willChange: 'transform, opacity' }}>
+          <img src={heroBgImg} alt="ABTS Hero" className="absolute inset-0 w-full h-full object-cover opacity-55" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-black/85" />
+          <div className="relative z-10 text-center w-full max-w-sm mx-auto pt-16">
+            <div className="inline-block px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white/80 text-[10px] font-bold uppercase tracking-widest mb-6">
+              Empowering Leaders
+            </div>
+            <h1 className="text-[2.5rem] font-black text-white tracking-tighter leading-[1.05] mb-5" style={{ fontFamily: 'var(--font-headings)' }}>
+              Rooted in<br />
+              <span className="text-[#b45309]">Scripture.</span><br />
+              Equipped for<br />
+              <span className="text-[#b45309]">Service.</span>
+            </h1>
+            <p className="text-sm text-white/70 font-medium mb-10 leading-relaxed mx-auto max-w-[280px]">
+              World-class apostolic theological education — wherever you serve.
+            </p>
+            <div className="flex flex-col gap-3 w-full max-w-[260px] mx-auto">
+              <Link
+                to="/online-application-form-for-admission"
+                onClick={() => navigate('/online-application-form-for-admission')}
+                className="w-full py-4 bg-[#b45309] text-white rounded-full font-bold text-sm tracking-wide shadow-lg text-center"
+              >
+                Apply Online
+              </Link>
+              <Link
+                to="/objectives"
+                onClick={() => navigate('/objectives')}
+                className="w-full py-4 rounded-full border border-white/30 text-white bg-white/10 font-semibold text-sm text-center"
+              >
+                Read Our Vision
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── WHY ABTS ── */}
-      <section className="m-fold relative min-h-[100dvh] overflow-hidden bg-white flex items-center">
-        <div className="m-fold-content relative z-10 w-full px-5 py-20 pt-24">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-600 mb-4">Why Choose Us</p>
-          <h2 className="text-3xl font-black text-slate-900 tracking-tighter leading-tight mb-10" style={{ fontFamily: 'var(--font-headings)' }}>
-            Why Choose<br />ABTS?
-          </h2>
-          <div className="divide-y divide-slate-100 border-t border-slate-100">
-            {bentoFeatures.map((feat, idx) => (
-              <div key={idx} className="py-5 flex items-start gap-4">
-                <span className="text-slate-300 font-mono text-xs shrink-0 mt-1 w-5">{String(idx + 1).padStart(2, '0')}</span>
-                <div>
-                  <h3 className="text-base font-bold text-slate-900 mb-1 leading-snug" style={{ fontFamily: 'var(--font-headings)' }}>{feat.title}</h3>
-                  <p className="text-sm text-slate-500 font-medium leading-relaxed">{feat.desc}</p>
+      <section className="m-fold relative min-h-[100dvh] overflow-hidden bg-white">
+        <div className="m-fold-inner absolute inset-0 flex items-center overflow-y-auto" style={{ willChange: 'transform, opacity' }}>
+          <div className="w-full px-5 py-24">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-600 mb-4">Why Choose Us</p>
+            <h2 className="text-3xl font-black text-slate-900 tracking-tighter leading-tight mb-8" style={{ fontFamily: 'var(--font-headings)' }}>
+              Why Choose<br />ABTS?
+            </h2>
+            <div className="divide-y divide-slate-100 border-t border-slate-100">
+              {bentoFeatures.map((feat, idx) => (
+                <div key={idx} className="py-5 flex items-start gap-4">
+                  <span className="text-slate-300 font-mono text-xs shrink-0 mt-1 w-5">{String(idx + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-900 mb-1 leading-snug" style={{ fontFamily: 'var(--font-headings)' }}>{feat.title}</h3>
+                    <p className="text-sm text-slate-500 font-medium leading-relaxed">{feat.desc}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── TESTIMONIAL ── */}
-      <section className="m-fold relative h-[100dvh] overflow-hidden bg-slate-900 flex items-center justify-center px-5">
-        {/* Subtle parallax texture bg */}
-        <div className="m-parallax-bg absolute inset-[-15%] z-0 opacity-10">
-          <img src={heroBgImg} alt="" className="w-full h-full object-cover" aria-hidden="true" />
-        </div>
-        <div className="absolute inset-0 bg-slate-900/80 z-0" />
-
-        <div className="m-fold-content relative z-10 text-center max-w-sm mx-auto px-2">
-          <Quote className="w-10 h-10 text-sky-400 mx-auto mb-6 opacity-60" />
-          <blockquote className="text-lg font-semibold text-white leading-relaxed mb-8" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
-            "God often shapes His servants within the very contexts where they are already serving. Our programs are designed to complement your ministry."
-          </blockquote>
-          <div>
-            <p className="font-black text-white text-sm uppercase tracking-widest">Dr. C.P. Thomas</p>
-            <p className="text-[#b45309] text-sm font-medium mt-1">Founder &amp; President</p>
+      <section className="m-fold relative h-[100dvh] overflow-hidden bg-slate-900">
+        <div className="m-fold-inner absolute inset-0 flex items-center justify-center px-5" style={{ willChange: 'transform, opacity' }}>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(2,132,199,0.08),transparent_70%)]" />
+          <div className="relative z-10 text-center max-w-sm mx-auto">
+            <Quote className="w-10 h-10 text-sky-400 mx-auto mb-6 opacity-60" />
+            <blockquote className="text-lg font-semibold text-white leading-relaxed mb-8" style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}>
+              "God often shapes His servants within the very contexts where they are already serving. Our programs are designed to complement your ministry."
+            </blockquote>
+            <div>
+              <p className="font-black text-white text-sm uppercase tracking-widest">Dr. C.P. Thomas</p>
+              <p className="text-[#b45309] text-sm font-medium mt-1">Founder &amp; President</p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* ── ACADEMICS ── */}
-      <section className="m-fold relative min-h-[100dvh] overflow-hidden bg-slate-950 flex items-center justify-center px-5">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(2,132,199,0.2),transparent_60%)] pointer-events-none" />
-
-        <div className="m-fold-content relative z-10 text-center w-full py-20 pt-28">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-500 mb-4">Academic Programs</p>
-          <h2 className="text-3xl font-black text-white tracking-tighter leading-tight mb-4" style={{ fontFamily: 'var(--font-headings)' }}>
-            Programs &amp;<br />Degrees
-          </h2>
-          <p className="text-sm text-slate-400 font-medium mb-10 max-w-[260px] mx-auto leading-relaxed">
-            Where the Bible is the textbook. Rigorous, accredited theology for every calling.
-          </p>
-
-          <div className="grid grid-cols-3 gap-3 max-w-xs mx-auto mb-10">
-            {['B.Th', 'B.Min', 'M.Div', 'M.Th', 'D.Min', 'Ph.D'].map((degree, idx) => (
-              <div key={idx} className="academic-item border border-sky-900/50 bg-sky-900/20 text-sky-400 font-bold font-mono text-base py-4 rounded-xl text-center">
-                {degree}
-              </div>
-            ))}
+      <section className="m-fold relative min-h-[100dvh] overflow-hidden bg-slate-950">
+        <div className="m-fold-inner absolute inset-0 flex items-center justify-center px-5" style={{ willChange: 'transform, opacity' }}>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(2,132,199,0.18),transparent_60%)] pointer-events-none" />
+          <div className="relative z-10 text-center w-full py-16">
+            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-sky-500 mb-4">Academic Programs</p>
+            <h2 className="text-3xl font-black text-white tracking-tighter leading-tight mb-4" style={{ fontFamily: 'var(--font-headings)' }}>
+              Programs &amp;<br />Degrees
+            </h2>
+            <p className="text-sm text-slate-400 font-medium mb-10 max-w-[260px] mx-auto leading-relaxed">
+              Where the Bible is the textbook. Rigorous, accredited theology for every calling.
+            </p>
+            <div className="grid grid-cols-3 gap-3 max-w-[280px] mx-auto mb-10">
+              {['B.Th', 'B.Min', 'M.Div', 'M.Th', 'D.Min', 'Ph.D'].map((degree, idx) => (
+                <div key={idx} className="border border-sky-900/50 bg-sky-900/20 text-sky-400 font-bold font-mono text-sm py-4 rounded-xl text-center">
+                  {degree}
+                </div>
+              ))}
+            </div>
+            <Link to="/academic" className="inline-block text-white uppercase tracking-widest text-xs font-bold border-b border-white pb-1 hover:text-sky-400 hover:border-sky-400 transition-colors">
+              View All Programs
+            </Link>
           </div>
-
-          <Link to="/academic" className="inline-block text-white uppercase tracking-widest text-xs font-bold border-b border-white pb-1 hover:text-sky-400 hover:border-sky-400 transition-colors">
-            View All Programs
-          </Link>
         </div>
       </section>
     </div>
@@ -331,17 +323,17 @@ export default function Home() {
     { title: 'Holistic Training', desc: 'Developing servant leaders spiritually and practically.' },
     { title: 'Strong Community', desc: 'Interactive support through forums and dedicated mentorship.' },
     { title: 'Practical Application', desc: 'Learning that transforms directly into ministry action.' },
-    { title: 'Affordable Pricing', desc: 'Cost should never be a barrier to fulfilling God\'s purpose.' }
+    { title: 'Affordable Pricing', desc: "Cost should never be a barrier to fulfilling God's purpose." }
   ];
 
   return (
     <div className="bg-slate-50 w-full relative">
-      {/* Desktop layout — hidden on mobile */}
+      {/* Desktop — hidden on mobile */}
       <div className="hidden md:block">
         <DesktopHome navigate={navigate} bentoFeatures={bentoFeatures} />
       </div>
 
-      {/* Mobile layout — hidden on desktop */}
+      {/* Mobile — hidden on desktop */}
       <div className="block md:hidden">
         <MobileHome navigate={navigate} bentoFeatures={bentoFeatures} />
       </div>
