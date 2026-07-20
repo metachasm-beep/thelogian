@@ -91,10 +91,11 @@ function App() {
             <button className="btn btn-primary">Discover our Programs</button>
           </div>
           <div>
-            {/* Placeholder until real image can be provided by user */}
-            <div style={{ width: '100%', height: '300px', backgroundColor: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px', boxShadow: 'var(--shadow-lg)', color: '#475569' }}>
-              ABTS Campus Image Placeholder
-            </div>
+            <img 
+              src="/assets/grad.jpg" 
+              alt="ABTS Graduating Students" 
+              style={{ width: '100%', borderRadius: '8px', boxShadow: 'var(--shadow-lg)' }} 
+            />
           </div>
         </div>
       </section>
