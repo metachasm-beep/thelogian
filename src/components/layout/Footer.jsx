@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logoImg from '../../assets/LOGO_new.png';
+import ABTSLogo from '../ui/ABTSLogo';
 export default function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-400 py-6 border-t border-slate-900">
@@ -11,9 +11,7 @@ export default function Footer() {
           {/* Logo & Info */}
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-8 h-8 flex items-center justify-center">
-                <img src={logoImg} alt="ABTS Logo" className="w-full h-full object-contain" />
-              </div>
+              <ABTSLogo size={36} light={true} />
               <div className="flex flex-col">
                 <span className="font-bold text-sm leading-none text-white tracking-widest uppercase" style={{ fontFamily: 'var(--font-headings)' }}>
                   ABTS

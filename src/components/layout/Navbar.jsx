@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, Search } from 'lucide-react';
-import logoImg from '../../assets/LOGO_new.png';
+import ABTSLogo from '../ui/ABTSLogo';
 import SearchModal from '../ui/SearchModal';
 
 const NAV_LINKS = [
@@ -49,18 +49,17 @@ export default function Navbar() {
         <div className="flex justify-between items-center">
           
           <Link to="/" className="flex items-center gap-3 group">
-            <div 
-              className="w-12 h-12 flex items-center justify-center group-hover:scale-105 transition-transform cursor-pointer"
-              onClick={(e) => {
-                e.preventDefault();
-                window.open(logoImg, '_blank');
-              }}
-              title="Click to view full logo"
-            >
-              <img src={logoImg} alt="ABTS Logo" className="w-full h-full object-contain drop-shadow-md" />
+            <div className="flex items-center justify-center group-hover:scale-105 transition-transform">
+              <ABTSLogo
+                size={52}
+                light={!isScrolled && location.pathname === '/'}
+              />
             </div>
             <div className="flex flex-col">
-              <span className={`font-bold text-lg leading-none ${isScrolled || location.pathname !== '/' ? 'text-slate-900' : 'text-slate-900 md:text-white'}`} style={{ fontFamily: 'var(--font-headings)' }}>
+              <span
+                className={`font-bold text-lg leading-none ${isScrolled || location.pathname !== '/' ? 'text-slate-900' : 'text-slate-900 md:text-white'}`}
+                style={{ fontFamily: 'var(--font-headings)' }}
+              >
                 ABTS
               </span>
               <span className={`text-[0.65rem] uppercase tracking-widest font-semibold ${isScrolled || location.pathname !== '/' ? 'text-sky-700' : 'text-sky-700 md:text-sky-300'}`}>
