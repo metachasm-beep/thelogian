@@ -38,9 +38,14 @@ export default function Footer() {
           
         </div>
         
-        {/* Copyright */}
-        <div className="mt-6 pt-6 border-t border-slate-900 text-center text-[0.65rem] uppercase tracking-widest text-slate-600">
-          &copy; {new Date().getFullYear()} Apostolic Theological Seminary. All rights reserved.
+        {/* Copyright & Registration */}
+        <div className="mt-6 pt-6 border-t border-slate-900 text-center flex flex-col gap-2">
+          <div className="text-[0.65rem] uppercase tracking-widest text-slate-500 font-bold">
+            Government Registration No: 272, Book No 4, Vol No 242. Regn under Indian Trust Regn Act 1882, Government NCT of Delhi.
+          </div>
+          <div className="text-[0.65rem] uppercase tracking-widest text-slate-600">
+            &copy; {new Date().getFullYear()} Apostolic Theological Seminary. All rights reserved.
+          </div>
         </div>
 
       </div>

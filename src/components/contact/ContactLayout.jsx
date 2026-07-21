@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, ArrowRight, Send } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, ArrowRight, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const contactDetails = [
@@ -36,6 +36,16 @@ const contactDetails = [
     icon: Clock,
     label: "Hours of Operation",
     lines: ["24 / 7 — Anytime"]
+  },
+  {
+    icon: ShieldCheck,
+    label: "Accreditations & Partnerships",
+    lines: [
+      "The World-Wide Accrediting Commission of Christian Educational Institutions (WWACCEI) Virginia, USA.",
+      "Global Partnership for Theological Accreditation & Mission (GPTAM), Incheon, South Korea.",
+      "Christian Education Department of Jesus Name Apostolic Holiness Church Inc, USA.",
+      "Jesus Christ Apostolic Ministries International (JCAMI) Richmond, Kentucky, USA."
+    ]
   }
 ];
 
