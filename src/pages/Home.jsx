@@ -224,7 +224,7 @@ function MobileHome({ navigate, bentoFeatures }) {
         >
           <img src={heroBgImg} alt="ABTS Hero" className="absolute inset-0 w-full h-full object-cover opacity-55" />
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/30 to-black/85" />
-          <div className="relative z-10 text-center w-full max-w-sm mx-auto pt-14">
+          <div className="relative z-10 text-center w-full max-w-sm md:max-w-lg mx-auto pt-14">
             <div className="inline-block px-3 py-1 rounded-full border border-white/20 bg-white/10 text-white/80 text-[10px] font-bold uppercase tracking-widest mb-5">
               Empowering Leaders
             </div>
@@ -266,7 +266,7 @@ function MobileHome({ navigate, bentoFeatures }) {
         style={{ scrollSnapAlign: 'start', scrollSnapStop: 'always' }}
       >
         <div
-          className="m-fold-inner absolute inset-0 flex flex-col justify-center px-5"
+          className="m-fold-inner absolute inset-0 flex flex-col justify-center px-5 md:max-w-2xl md:mx-auto w-full"
           style={{ willChange: 'transform, opacity' }}
         >
           {/* Header row */}
@@ -324,10 +324,10 @@ function MobileHome({ navigate, bentoFeatures }) {
           style={{ willChange: 'transform, opacity' }}
         >
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(2,132,199,0.08),transparent_70%)]" />
-          <div className="relative z-10 text-center max-w-sm mx-auto">
-            <Quote className="w-9 h-9 text-sky-400 mx-auto mb-5 opacity-60" />
+          <div className="relative z-10 text-center max-w-sm md:max-w-3xl mx-auto">
+            <Quote className="w-9 h-9 md:w-12 md:h-12 text-sky-400 mx-auto mb-5 md:mb-8 opacity-60" />
             <blockquote
-              className="text-base font-semibold text-white leading-relaxed mb-7"
+              className="text-base md:text-2xl font-semibold text-white leading-relaxed mb-7 md:mb-10"
               style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
             >
               "God often shapes His servants within the very contexts where they are already serving. Our programs are designed to complement your ministry."
@@ -361,11 +361,11 @@ function MobileHome({ navigate, bentoFeatures }) {
             <p className="text-xs text-slate-400 font-medium mb-7 max-w-[240px] mx-auto leading-relaxed">
               Where the Bible is the textbook. Rigorous, accredited theology for every calling.
             </p>
-            <div className="grid grid-cols-3 gap-2.5 max-w-[270px] mx-auto mb-7">
+            <div className="grid grid-cols-3 gap-2.5 md:gap-4 max-w-[270px] md:max-w-[450px] mx-auto mb-7">
               {['B.Th', 'B.Min', 'M.Div', 'M.Th', 'D.Min', 'Ph.D'].map((degree, idx) => (
                 <div
                   key={idx}
-                  className="border border-sky-900/50 bg-sky-900/20 text-sky-400 font-bold font-mono text-sm py-3.5 rounded-xl text-center"
+                  className="border border-sky-900/50 bg-sky-900/20 text-sky-400 font-bold font-mono text-sm md:text-xl py-3.5 md:py-6 rounded-xl md:rounded-2xl text-center"
                 >
                   {degree}
                 </div>
@@ -402,12 +402,12 @@ export default function Home() {
   return (
     <div className="bg-slate-50 w-full relative">
       {/* Desktop — hidden on mobile & tablet */}
-      <div className="hidden lg:block">
+      <div className="hidden xl:block">
         <DesktopHome navigate={navigate} bentoFeatures={bentoFeatures} />
       </div>
 
       {/* Mobile & Tablet — hidden on desktop */}
-      <div className="block lg:hidden">
+      <div className="block xl:hidden">
         <MobileHome navigate={navigate} bentoFeatures={bentoFeatures} />
       </div>
 
