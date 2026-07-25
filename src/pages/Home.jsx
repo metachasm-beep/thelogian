@@ -401,13 +401,13 @@ export default function Home() {
 
   return (
     <div className="bg-slate-50 w-full relative">
-      {/* Desktop — hidden on mobile */}
-      <div className="hidden md:block">
+      {/* Desktop — hidden on mobile & tablet */}
+      <div className="hidden lg:block">
         <DesktopHome navigate={navigate} bentoFeatures={bentoFeatures} />
       </div>
 
-      {/* Mobile — hidden on desktop */}
-      <div className="block md:hidden">
+      {/* Mobile & Tablet — hidden on desktop */}
+      <div className="block lg:hidden">
         <MobileHome navigate={navigate} bentoFeatures={bentoFeatures} />
       </div>
 

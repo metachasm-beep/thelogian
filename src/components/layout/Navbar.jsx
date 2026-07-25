@@ -68,7 +68,7 @@ export default function Navbar() {
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden lg:flex items-center gap-8">
             {NAV_LINKS.map(link => {
               const isActive = location.pathname === link.path || (link.path !== '/' && location.pathname.startsWith(link.path));
               const textColor = isScrolled || location.pathname !== '/' ? 'text-slate-600 hover:text-sky-700' : 'text-slate-200 hover:text-white';
@@ -106,7 +106,7 @@ export default function Navbar() {
             </Link>
           </nav>
 
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className={isScrolled || location.pathname !== '/' ? 'text-slate-900' : 'text-white'}
@@ -119,7 +119,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-slate-100 py-4 px-4 flex flex-col gap-4">
+        <div className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-slate-100 py-4 px-4 flex flex-col gap-4">
           <button 
             onClick={() => { setSearchOpen(true); setMobileMenuOpen(false); }}
             className="flex items-center justify-between text-base font-bold p-3 rounded-lg text-slate-700 bg-slate-50"
